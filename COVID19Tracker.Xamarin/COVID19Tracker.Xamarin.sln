@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "COVID19Tracker.Xamarin.Andr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "COVID19Tracker.Xamarin.iOS", "COVID19Tracker.Xamarin\COVID19Tracker.Xamarin.iOS\COVID19Tracker.Xamarin.iOS.csproj", "{1823BAB5-CC84-468D-BD6A-FDF04249D39F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "COVID19Tracker.Xamarin", "COVID19Tracker.Xamarin\COVID19Tracker.Xamarin\COVID19Tracker.Xamarin.csproj", "{19749197-5E3C-4F50-824E-2C7A18924E62}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "COVID19Tracker.Xamarin", "COVID19Tracker.Xamarin\COVID19Tracker.Xamarin\COVID19Tracker.Xamarin.csproj", "{19749197-5E3C-4F50-824E-2C7A18924E62}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Platfors", "Platfors", "{E2864D56-8D0F-4A04-A3C4-4271ADB71CE4}"
 EndProject
@@ -22,8 +22,11 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SharedLibrary", "SharedLibrary", "{58961C5B-E82B-4F89-904C-4CBAE839C69A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_data", "_data", "{0D3FD7D1-A940-460B-8FF4-69DCAA5E01E5}"
+	ProjectSection(SolutionItems) = preProject
+		..\_data\country.json = ..\_data\country.json
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "COVID19Tracker.Library", "..\COVID19Tracker.Library\COVID19Tracker.Library.csproj", "{BE81F997-2130-44B5-9FA8-21845EAB2132}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "COVID19Tracker.Library", "..\COVID19Tracker.Library\COVID19Tracker.Library.csproj", "{BE81F997-2130-44B5-9FA8-21845EAB2132}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
