@@ -360,9 +360,7 @@ namespace covid19phlib.ViewModels
 
         void RefreshList(List<DTO_Model_CountryData> source)
         {
-            stopwatch.Reset();
             stopwatch.Restart();
-
             stopwatch.Start();
 
             UpdateListFromSource(source);
@@ -370,7 +368,7 @@ namespace covid19phlib.ViewModels
 
             stopwatch.Stop();
 
-            Debug.WriteLine("refresh duration: " + stopwatch.ElapsedMilliseconds + "ms");
+            Debug.WriteLine("DEBUG> refresh duration: " + stopwatch.ElapsedMilliseconds + "ms - total items: " + source.Count);
         }
 
         void SortByCountryName()

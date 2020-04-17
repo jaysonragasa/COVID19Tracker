@@ -21,12 +21,19 @@ using System.Runtime.InteropServices;
 //      Minor Version 
 //      Build Number
 //      Revision
-[assembly: AssemblyVersion("1.0.34.0")]
-[assembly: AssemblyFileVersion("1.0.34.0")]
+[assembly: AssemblyVersion("1.0.41.0")]
+[assembly: AssemblyFileVersion("1.0.41.0")]
 
 // Add some common permissions, these can be removed if not needed
 [assembly: UsesPermission(Android.Manifest.Permission.Internet)]
 [assembly: UsesPermission(Android.Manifest.Permission.WriteExternalStorage)]
+
+
+
+
+
+
+
 
 
 
