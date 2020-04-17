@@ -303,7 +303,7 @@ namespace covid19phlib.ViewModels
             int conf = 0;
             int rec = 0;
             int det = 0;
-            DateTime lastupdate = new DateTime();
+            DateTime lastupdate = DateTime.Now.AddDays(-1); // new DateTime();
 
             // update our lists without clearing our collection
             for (int i = 0; i < source.Count; i++)
