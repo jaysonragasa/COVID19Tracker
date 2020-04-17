@@ -196,7 +196,7 @@ namespace covid19phlib.ViewModels
 
         public async Task RefreshData(Enums_ListFilter listFilter = Enums_ListFilter.GLOBAL)
         {
-            if (this.IsLoading 
+            if (this.IsLoading
                 //|| this._currentFilter == listFilter
                 )
             {
@@ -248,6 +248,11 @@ namespace covid19phlib.ViewModels
             this.IsRefreshing = false;
         }
 
+        /// <summary>
+        /// This produces slower loading of the list
+        /// even though we're clearing everything.
+        /// </summary>
+        /// <param name="source"></param>
         void LazyUpdateListFromSource(List<DTO_Model_CountryData> source)
         {
             this.Countries.Clear();
@@ -310,7 +315,7 @@ namespace covid19phlib.ViewModels
             {
                 var countryw = this.Countries.Where(x => x.CountryName == source[i].country).SingleOrDefault();
 
-                if(countryw != null)
+                if (countryw != null)
                 {
                     int oldIndex = this.Countries.IndexOf(countryw);
                     this.Countries.Move(oldIndex, i);
@@ -337,9 +342,9 @@ namespace covid19phlib.ViewModels
             }
 
             // remove old items
-            if(source.Count < this.Countries.Count)
+            if (source.Count < this.Countries.Count)
             {
-                for(int i = this.Countries.Count - 1; i >= source.Count; i--)
+                for (int i = this.Countries.Count - 1; i >= source.Count; i--)
                 {
                     this.Countries.RemoveAt(i);
                 }
