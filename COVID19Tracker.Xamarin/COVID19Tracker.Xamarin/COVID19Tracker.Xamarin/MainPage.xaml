@@ -21,9 +21,9 @@
         </Frame>
 
         <Frame Grid.Row="1" Margin="5,0" BackgroundColor="White">
-            <Grid jio:GridEx.RowDefinitions="auto,auto,*,auto">
+            <Grid jio:GridEx.RowDefinitions="~ ~ * ~">
                 <Grid BackgroundColor="#FFE49075" Margin="0,0,0,3">
-                    <Label Text="Tap on the headers to descendlingly sort the cases" FontSize="10" Margin="10" TextColor="White" />
+                    <Label Text="Tap on the headers to sort the cases. Pull down the list to refresh." FontSize="10" Margin="10" TextColor="White" />
                 </Grid>
 
                 <Grid Grid.Row="1" jio:GridEx.ColumnDefinitions="1*,*,*,*" HeightRequest="30">

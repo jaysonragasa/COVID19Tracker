@@ -1,0 +1,57 @@
+<#@ template debug="true" hostspecific="true" language="C#" #>
+<#@ output extension=".cs" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Text.RegularExpressions" #>
+<#@ import namespace="System.Text" #>
+<#
+	string fileContent = File.ReadAllText(this.Host.ResolvePath("AssemblyInfo.cs"), Encoding.UTF8);
+
+	try
+	{
+		int major = 1;
+		int minor = 0;
+		int revision = 0;
+		int build = 0;
+
+		string[] regexpats = new string[] {
+			"AssemblyVersion\\(\"(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<build>\\d+)\\.(?<revision>\\d+)\"\\)",
+			"AssemblyFileVersion\\(\"(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<build>\\d+)\\.(?<revision>\\d+)\"\\)"
+		};
+		string[] asmProp = new string[]
+		{
+			"AssemblyVersion",
+			"AssemblyFileVersion"
+		};
+
+		for(int i = 0; i < regexpats.Length; i++)
+		{
+			string regexpattern = regexpats[i];
+			RegexOptions options = ((RegexOptions.IgnorePatternWhitespace | RegexOptions.Multiline) | RegexOptions.IgnoreCase);
+			Regex regex = new Regex(regexpattern, options);
+			MatchCollection matches = regex.Matches(fileContent);
+
+			if (regex.IsMatch(fileContent))
+			{
+				Match m = regex.Match(fileContent);
+
+				major = Convert.ToInt32(m.Groups["major"].Value);
+				minor = Convert.ToInt32(m.Groups["minor"].Value);
+				build = Convert.ToInt32(m.Groups["build"].Value) + 1; // increment build number
+				revision = Convert.ToInt32(m.Groups["revision"].Value);
+
+				// increase revisio number if the build config is in release;
+				if (this.Host.ResolveParameterValue("-", "-", "BuildConfiguration") == "Release") 
+					revision++;
+
+				fileContent = regex.Replace(fileContent, asmProp[i] + "(\"" + major + "." + minor + "." + build + "." + revision + "\")");
+			}
+		}
+		
+		WriteLine(fileContent);
+	}
+	catch(Exception ex)
+	{
+		WriteLine("/*" + ex.Message + "\r\n" + ex.StackTrace + "*/");
+		WriteLine(fileContent);
+	}
+#>
