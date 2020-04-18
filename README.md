@@ -21,3 +21,6 @@ This duration will be different based on your device. But I'm already using Sams
 
 ## STATUS
 currently developing
+
+## AppCenter Build Status
+[![Build status](https://build.appcenter.ms/v0.1/apps/a83e5cd2-2d28-4124-9ec8-1fea5a2d7976/branches/master/badge)](https://appcenter.ms)
