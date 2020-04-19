@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
+﻿using FFImageLoading.Forms.Platform;
 using Foundation;
 using UIKit;
 
@@ -22,6 +19,9 @@ namespace COVID19Tracker.Xamarin.iOS
         //
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
+            FFImageLoading.Forms.Platform.CachedImageRenderer.Init();
+            CachedImageRenderer.InitImageSourceHandler();
+
             global::Xamarin.Forms.Forms.Init();
             LoadApplication(new App());
 

@@ -7,6 +7,7 @@ using XamEs = Xamarin.Essentials;
 using Microsoft.AppCenter;
 using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
+using FFImageLoading.Forms.Platform;
 
 namespace COVID19Tracker.Xamarin.Droid
 {
@@ -19,6 +20,9 @@ namespace COVID19Tracker.Xamarin.Droid
             ToolbarResource = Resource.Layout.Toolbar;
 
             base.OnCreate(savedInstanceState);
+
+            CachedImageRenderer.Init(enableFastRenderer: true);
+            CachedImageRenderer.InitImageViewHandler();
 
             AppCenter.Start("151bf9a6-f3cb-48e7-a989-82aa24d85a70",
                                typeof(Analytics), typeof(Crashes));
