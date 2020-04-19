@@ -1,4 +1,4 @@
-﻿#define TEST
+﻿//#define TEST
 
 using covid19phlib.DTO_Models;
 using covid19phlib.Interfaces;
