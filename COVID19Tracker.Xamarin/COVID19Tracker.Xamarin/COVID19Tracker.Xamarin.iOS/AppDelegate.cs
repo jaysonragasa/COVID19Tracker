@@ -1,6 +1,9 @@
 ﻿using FFImageLoading.Forms.Platform;
 using Foundation;
 using UIKit;
+using Microsoft.AppCenter;
+using Microsoft.AppCenter.Analytics;
+using Microsoft.AppCenter.Crashes;
 
 namespace COVID19Tracker.Xamarin.iOS
 {
@@ -21,6 +24,9 @@ namespace COVID19Tracker.Xamarin.iOS
         {
             FFImageLoading.Forms.Platform.CachedImageRenderer.Init();
             CachedImageRenderer.InitImageSourceHandler();
+
+            AppCenter.Start("8f6306a6-9b45-4b54-a4da-96141430ec56",
+                   typeof(Analytics), typeof(Crashes));
 
             global::Xamarin.Forms.Forms.Init();
             LoadApplication(new App());
