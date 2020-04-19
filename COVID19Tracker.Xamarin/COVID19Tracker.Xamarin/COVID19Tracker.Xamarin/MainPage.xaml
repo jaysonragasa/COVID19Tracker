@@ -12,17 +12,21 @@
              BindingContext="{Binding Source={StaticResource Locator}}"
              >
 
-    <Grid jio:GridEx.RowDefinitions="auto,*,auto">
-        <Frame Grid.Row="0" Margin="5,0,5,5" BackgroundColor="White">
-            <StackLayout>
+    <Grid jio:GridEx.RowDefinitions="auto,*,auto" BackgroundColor="#FF686868">
+        <Grid jio:GridEx.RowColumn="0 3">
+            <Image Source="facemasks.jpg" Aspect="AspectFill" />
+        </Grid>
+        
+        <Grid Grid.Row="0" BackgroundColor="#eeffffff" Margin="10,10,10,0">
+            <StackLayout Margin="10">
                 <Label Text="COVID-19 Tracker" FontSize="20" />
                 <Label Text="data: coronatracker.com" FontSize="10" />
             </StackLayout>
-        </Frame>
+        </Grid>
 
-        <Grid Grid.Row="1" jio:GridEx.RowDefinitions="* ~" BackgroundColor="White">
-            <Frame Margin="5,0,5,5">
-                <Grid jio:GridEx.RowDefinitions="~ ~ * ~">
+        <Grid Grid.Row="1" jio:GridEx.RowDefinitions="* ~" >
+            <Grid Margin="10" BackgroundColor="#eeffffff">
+                <Grid jio:GridEx.RowDefinitions="~ ~ * ~" Margin="10">
                     <Grid BackgroundColor="#FFE49075" Margin="0,0,0,10">
                         <Label Text="Tap on the headers to sort the cases. Pull down the list to refresh." FontSize="10" Margin="10" TextColor="White" />
                     </Grid>
@@ -97,7 +101,7 @@
 
                     <ActivityIndicator jio:GridEx.RowColumn="0 3" IsVisible="{Binding Dashboard.IsLoading}" IsRunning="True" WidthRequest="24" VerticalOptions="Center" HorizontalOptions="Center" />
                 </Grid>
-            </Frame>
+            </Grid>
 
             <Grid VerticalOptions="End" BackgroundColor="White" IsVisible="{Binding Dashboard.ShowFilter}" Grid.Row="1">
                 <StackLayout Margin="10">
@@ -127,20 +131,18 @@
                         <TapGestureRecognizer Command="{Binding Dashboard.Command_ShowFilter}" />
                     </Grid.GestureRecognizers>
                 </Grid>
+
+                <Grid HeightRequest="48" WidthRequest="48">
+                    <Label Text="💡" VerticalOptions="Center"  HorizontalOptions="Center" FontSize="20"/>
+
+                    <Grid.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding Dashboard.Command_About}" />
+                    </Grid.GestureRecognizers>
+                </Grid>
             </StackLayout>
 
             <Grid HeightRequest="1" BackgroundColor="#20000000" VerticalOptions="Start" HorizontalOptions="FillAndExpand" />
         </Grid>
-
-        <Frame Grid.Row="2" Margin="5,0" BackgroundColor="White" IsVisible="false">
-            <StackLayout>
-                <Label Text="Filter" />
-                <Picker ItemsSource="{Binding Dashboard.ListFilter}" 
-                            SelectedItem="{Binding BindingContext.Dashboard.SelectedFilter, Mode=TwoWay, Source={x:Reference this}}" 
-                            ItemDisplayBinding="{Binding ListTypeName}" 
-                            Title="List By" />
-            </StackLayout>
-        </Frame>
 
     </Grid>
 
