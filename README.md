@@ -8,4 +8,5 @@ JSON data are provided by [coronatracker.com](https://www.coronatracker.com/) wh
 currently developing
 
 ## AppCenter Build Status
-[![Build status](https://build.appcenter.ms/v0.1/apps/a83e5cd2-2d28-4124-9ec8-1fea5a2d7976/branches/master/badge)](https://appcenter.ms)
+Android [![Build status](https://build.appcenter.ms/v0.1/apps/a83e5cd2-2d28-4124-9ec8-1fea5a2d7976/branches/master/badge)](https://appcenter.ms)  
+iOS [![Build status](https://build.appcenter.ms/v0.1/apps/55864191-1bfe-4b9b-a2fe-af222733828a/branches/master/badge)](https://appcenter.ms)
