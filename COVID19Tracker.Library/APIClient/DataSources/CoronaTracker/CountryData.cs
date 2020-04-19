@@ -2,15 +2,28 @@
 
 using covid19phlib.DTO_Models;
 using covid19phlib.Interfaces;
-using Newtonsoft.Json;
+using COVID19Tracker.Library.APIClient.Interfaces;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
-namespace covid19phlib.APIClient
+namespace COVID19Tracker.Library.APIClient.DataSources.CoronaTracker
 {
-    public class CountryData 
+    public class CountryData : ICountryData
     {
         IWebClientService _webclient;
+        string[] _asean = new string[] {
+            "ID", // indonesia
+            "MY", // malaysia
+            "PH", // philippines
+            "SG", // singapore
+            "TH", // thailand
+            "BN", // brunai
+            "LA", // laos
+            "MM", // myanmar
+            "KH", // cambodia
+            "VN"  // vietname
+        };
 
         public CountryData(IWebClientService webClientService)
         {
@@ -4030,5 +4043,42 @@ namespace covid19phlib.APIClient
             return ret;
         }
 #endif
+
+        public async Task<ResponseData> GetGlobal()
+        {
+            ResponseData ret = new ResponseData();
+
+            //var data = await _webclient.GetAsync<DTO_Model_Countries>("https://raw.githubusercontent.com/Nullstr1ng/Covid19Ph/master/country.json");
+            var data = await _webclient.GetAsync<List<DTO_Model_CountryData>>("https://api.coronatracker.com/v3/stats/worldometer/topCountry");
+
+            if (data != null)
+            {
+                ret.Result = data;
+                ret.Status = true;
+                ret.Message = "GetGlobal";
+            }
+
+            return ret;
+        }
+
+        public async Task<ResponseData> GetASEAN()
+        {
+            ResponseData ret = new ResponseData();
+
+            //var data = await _webclient.GetAsync<DTO_Model_Countries>("https://raw.githubusercontent.com/Nullstr1ng/Covid19Ph/master/country.json");
+            var data = await _webclient.GetAsync<List<DTO_Model_CountryData>>("https://api.coronatracker.com/v3/stats/worldometer/topCountry");
+
+            if (data != null)
+            {
+                var asean_countries = data.Where(x => this._asean.Contains(x.countryCode)).ToList();
+
+                ret.Result = asean_countries;
+                ret.Status = true;
+                ret.Message = "GetASEAN";
+            }
+
+            return ret;
+        }
+
     }
 }

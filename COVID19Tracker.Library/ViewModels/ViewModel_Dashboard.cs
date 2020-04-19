@@ -1,17 +1,14 @@
-﻿using covid19phlib.APIClient;
-using covid19phlib.BO_Models;
+﻿using covid19phlib.BO_Models;
 using covid19phlib.DTO_Models;
 using covid19phlib.Enums;
 using covid19phlib.Interfaces;
-
+using COVID19Tracker.Library.APIClient.Interfaces;
 using GalaSoft.MvvmLight.Command;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Diagnostics.Tracing;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -24,22 +21,11 @@ namespace covid19phlib.ViewModels
         #endregion
 
         #region vars
+        
         int i = 0;
         Enums_ListFilter _currentFilter = Enums_ListFilter.NONE;
         IIoC _ioc;
         List<DTO_Model_CountryData> _localStore = new List<DTO_Model_CountryData>();
-        string[] _asean = new string[] {
-            "ID", // indonesia
-            "MY", // malaysia
-            "PH", // philippines
-            "SG", // singapore
-            "TH", // thailand
-            "BN", // brunai
-            "LA", // laos
-            "MM", // myanmar
-            "KH", // cambodia
-            "VN"  // vietname
-        };
         Stopwatch stopwatch = new Stopwatch();
         #endregion
 
@@ -125,8 +111,10 @@ namespace covid19phlib.ViewModels
         #endregion
 
         #region ctors
-        public ViewModel_Dashboard(IIoC ioc)
+        public ViewModel_Dashboard(IIoC ioc, IAPILocator api)
         {
+            this.API = api;
+
             this._ioc = ioc;
 
             InitCommands();
@@ -209,35 +197,39 @@ namespace covid19phlib.ViewModels
 
             this._currentFilter = listFilter;
 
-            var apiloc = this._ioc.GI<APILocator>();
-            var res = await apiloc.Country.GetCountryData();
+            ResponseData responseData = null;
 
-            if (res.Status)
+            if (listFilter == Enums_ListFilter.GLOBAL || listFilter == Enums_ListFilter.NONE)
             {
-                var countryData = (List<DTO_Model_CountryData>)res.Result;
-                List<DTO_Model_CountryData> countryDataList = countryData.ToList();
+                responseData = await this.API.Country.GetGlobal();
+            }
+            else if (listFilter == Enums_ListFilter.ASEAN)
+            {
+                responseData = await this.API.Country.GetASEAN();
+            }
 
-                if (listFilter == Enums_ListFilter.GLOBAL || listFilter == Enums_ListFilter.NONE)
-                {
-                    countryDataList = countryDataList.OrderByDescending(x => x.totalConfirmed).ToList();
-                }
-                else if (listFilter == Enums_ListFilter.ASEAN)
-                {
-                    countryDataList = countryDataList.Where(x => this._asean.Contains(x.countryCode)).OrderByDescending(x => x.totalConfirmed).ToList();
-                }
+            if (responseData.Status)
+            {
+                List<DTO_Model_CountryData> countryDataList = (List<DTO_Model_CountryData>)responseData.Result;
 
-                countryData = null;
-
-                // update local store for sorting
+                if (countryDataList != null)
                 {
-                    this._localStore.Clear();
-                    for (int i = 0; i < countryDataList.Count; i++)
+                    // update local store for sorting
                     {
-                        this._localStore.Add(countryDataList[i]);
+                        this._localStore.Clear();
+                        for (int i = 0; i < countryDataList.Count; i++)
+                        {
+                            this._localStore.Add(countryDataList[i]);
+                        }
                     }
-                }
 
-                RefreshList(countryDataList);
+                    RefreshList(countryDataList);
+                }
+                else
+                {
+                    // no data
+                    Debug.WriteLine("DEBUG> NO DATA");
+                }
             }
             else
             {
