@@ -3,6 +3,7 @@ using covid19phlib.DTO_Models;
 using covid19phlib.Enums;
 using covid19phlib.Interfaces;
 using COVID19Tracker.Library.APIClient.Interfaces;
+using COVID19Tracker.Library.Interfaces;
 using GalaSoft.MvvmLight.Command;
 using System;
 using System.Collections.Generic;
@@ -132,6 +133,8 @@ namespace covid19phlib.ViewModels
         public ICommand Command_PullRefresh { get; set; }
         public ICommand Command_ShowFilter { get; set; }
         public ICommand Command_ApplyFilter { get; set; }
+
+        public ICommand Command_About { get; set; }
         #endregion
 
         #region ctors
@@ -189,6 +192,13 @@ namespace covid19phlib.ViewModels
             //    //var uiContent = SynchronizationContext.Current;
             //    //uiContent.Send(x => RefreshData(value.ListFilter), null);
         }
+
+        void Command_About_Click()
+        {
+            var nav = this._ioc.GI<INavService>();
+
+            nav.GoToPage(COVID19Tracker.Library.Enums.Enum_NavService_Pages.About);
+        }
         #endregion
 
         #region methods
@@ -201,6 +211,7 @@ namespace covid19phlib.ViewModels
             if (Command_PullRefresh == null) Command_PullRefresh = new RelayCommand(Command_PullRefresh_Click);
             if (Command_ShowFilter == null) Command_ShowFilter = new RelayCommand(Command_ShowFilter_Click);
             if (Command_ApplyFilter == null) Command_ApplyFilter = new RelayCommand(Command_ApplyFilter_Click);
+            if (Command_About == null) Command_About = new RelayCommand(Command_About_Click);
         }
 
         void DesignData()

@@ -131,20 +131,18 @@
                         <TapGestureRecognizer Command="{Binding Dashboard.Command_ShowFilter}" />
                     </Grid.GestureRecognizers>
                 </Grid>
+
+                <Grid HeightRequest="48" WidthRequest="48">
+                    <Label Text="💡" VerticalOptions="Center"  HorizontalOptions="Center" FontSize="20"/>
+
+                    <Grid.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding Dashboard.Command_About}" />
+                    </Grid.GestureRecognizers>
+                </Grid>
             </StackLayout>
 
             <Grid HeightRequest="1" BackgroundColor="#20000000" VerticalOptions="Start" HorizontalOptions="FillAndExpand" />
         </Grid>
-
-        <Frame Grid.Row="2" Margin="5,0" BackgroundColor="White" IsVisible="false">
-            <StackLayout>
-                <Label Text="Filter" />
-                <Picker ItemsSource="{Binding Dashboard.ListFilter}" 
-                            SelectedItem="{Binding BindingContext.Dashboard.SelectedFilter, Mode=TwoWay, Source={x:Reference this}}" 
-                            ItemDisplayBinding="{Binding ListTypeName}" 
-                            Title="List By" />
-            </StackLayout>
-        </Frame>
 
     </Grid>
 
