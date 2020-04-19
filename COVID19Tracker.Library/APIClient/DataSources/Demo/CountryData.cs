@@ -7,24 +7,9 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace COVID19Tracker.Library.APIClient.DataSources.Demo
-
 {
-    public class CountryData : ICountryData
+    public class CountryData : CountryDataBase, ICountryData
     {
-        IWebClientService _webclient;
-        string[] _asean = new string[] {
-            "ID", // indonesia
-            "MY", // malaysia
-            "PH", // philippines
-            "SG", // singapore
-            "TH", // thailand
-            "BN", // brunai
-            "LA", // laos
-            "MM", // myanmar
-            "KH", // cambodia
-            "VN"  // vietname
-        };
-
         string jsondata = @"[
   {
     ""countryCode"": ""US"",
@@ -4007,9 +3992,8 @@ namespace COVID19Tracker.Library.APIClient.DataSources.Demo
 ]";
         List<DTO_Model_CountryData> JSONData = null;
 
-        public CountryData(IWebClientService webClientService)
+        public CountryData()
         {
-            this._webclient = webClientService;
             JSONData = JsonConvert.DeserializeObject<List<DTO_Model_CountryData>>(this.jsondata);
         }
 
@@ -4028,7 +4012,7 @@ namespace COVID19Tracker.Library.APIClient.DataSources.Demo
         {
             ResponseData ret = new ResponseData();
 
-            var asean_countries = JSONData.Where(x => this._asean.Contains(x.countryCode)).ToList();
+            var asean_countries = JSONData.Where(x => this.ASEANCountries.Contains(x.countryCode)).ToList();
 
             ret.Result = asean_countries;
             ret.Status = true;

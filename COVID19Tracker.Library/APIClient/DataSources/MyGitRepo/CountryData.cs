@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace COVID19Tracker.Library.APIClient.DataSources.CoronaTracker
+namespace COVID19Tracker.Library.APIClient.DataSources.MyGitRepo
 {
     public class CountryData : CountryDataBase, ICountryData
     {
@@ -17,8 +17,8 @@ namespace COVID19Tracker.Library.APIClient.DataSources.CoronaTracker
         public async Task<ResponseData> GetGlobal()
         {
             ResponseData ret = new ResponseData();
-            
-            var data = await this.Web.GetAsync<List<DTO_Model_CountryData>>("https://api.coronatracker.com/v3/stats/worldometer/topCountry");
+
+            var data = await this.Web.GetAsync<List<DTO_Model_CountryData>>("https://raw.githubusercontent.com/jaysonragasa/COVID19Tracker/master/_data/country.json");
 
             if (data != null)
             {
@@ -34,7 +34,7 @@ namespace COVID19Tracker.Library.APIClient.DataSources.CoronaTracker
         {
             ResponseData ret = new ResponseData();
 
-            var data = await this.Web.GetAsync<List<DTO_Model_CountryData>>("https://api.coronatracker.com/v3/stats/worldometer/topCountry");
+            var data = await this.Web.GetAsync<List<DTO_Model_CountryData>>("https://raw.githubusercontent.com/jaysonragasa/COVID19Tracker/master/_data/country.json");
 
             if (data != null)
             {
