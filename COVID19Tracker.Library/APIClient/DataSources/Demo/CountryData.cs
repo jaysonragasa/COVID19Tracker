@@ -1,28 +1,15 @@
-﻿//#define TEST
-
-using covid19phlib.DTO_Models;
-using covid19phlib.Interfaces;
+﻿using covid19phlib.DTO_Models;
+using COVID19Tracker.Library.APIClient.Interfaces;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
-namespace covid19phlib.APIClient
+namespace COVID19Tracker.Library.APIClient.DataSources.Demo
 {
-    public class CountryData 
+    public class CountryData : CountryDataBase, ICountryData
     {
-        IWebClientService _webclient;
-
-        public CountryData(IWebClientService webClientService)
-        {
-            this._webclient = webClientService;
-        }
-
-#if TEST
-        public async Task<ResponseData> GetCountryData()
-        {
-            ResponseData ret = new ResponseData();
-
-            var data = JsonConvert.DeserializeObject<List<DTO_Model_CountryData>>(@"[
+        string jsondata = @"[
   {
     ""countryCode"": ""US"",
     ""country"": ""USA"",
@@ -4001,34 +3988,37 @@ namespace covid19phlib.APIClient
     ""PR"": null,
     ""lastUpdated"": ""2020-03-20T00:00:00.000Z""
   }
-]");
-            
-            if (data != null)
-            {
-                ret.Result = data;
-                ret.Status = true;
-                ret.Message = "GetCountryData";
-            }
+]";
+        List<DTO_Model_CountryData> JSONData = null;
 
-            return ret;
+        public CountryData()
+        {
+            JSONData = JsonConvert.DeserializeObject<List<DTO_Model_CountryData>>(this.jsondata);
         }
-#else
-        public async Task<ResponseData> GetCountryData()
+
+        public async Task<ResponseData> GetGlobal()
         {
             ResponseData ret = new ResponseData();
 
-            //var data = await _webclient.GetAsync<DTO_Model_Countries>("https://raw.githubusercontent.com/Nullstr1ng/Covid19Ph/master/country.json");
-            var data = await _webclient.GetAsync<List<DTO_Model_CountryData>>("https://api.coronatracker.com/v3/stats/worldometer/topCountry");
-
-            if (data != null)
-            {
-                ret.Result = data;
-                ret.Status = true;
-                ret.Message = "GetCountryData";
-            }
+            ret.Result = JSONData;
+            ret.Status = true;
+            ret.Message = "GetGlobal";
 
             return ret;
         }
-#endif
+
+        public async Task<ResponseData> GetASEAN()
+        {
+            ResponseData ret = new ResponseData();
+
+            var asean_countries = JSONData.Where(x => this.ASEANCountries.Contains(x.countryCode)).ToList();
+
+            ret.Result = asean_countries;
+            ret.Status = true;
+            ret.Message = "GetASEAN";
+
+            return ret;
+        }
+
     }
 }

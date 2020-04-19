@@ -1,17 +1,14 @@
-﻿using covid19phlib.APIClient;
-using covid19phlib.BO_Models;
+﻿using covid19phlib.BO_Models;
 using covid19phlib.DTO_Models;
 using covid19phlib.Enums;
 using covid19phlib.Interfaces;
-
+using COVID19Tracker.Library.APIClient.Interfaces;
 using GalaSoft.MvvmLight.Command;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Diagnostics.Tracing;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -20,26 +17,15 @@ namespace covid19phlib.ViewModels
     public class ViewModel_Dashboard : VMBase
     {
         #region events
-
+        public event EventHandler<Model_CountryData> OnCountryLookupFound;
         #endregion
 
         #region vars
+        
         int i = 0;
         Enums_ListFilter _currentFilter = Enums_ListFilter.NONE;
-        IIoC _ioc;
+        IIoC _ioc = null;
         List<DTO_Model_CountryData> _localStore = new List<DTO_Model_CountryData>();
-        string[] _asean = new string[] {
-            "ID", // indonesia
-            "MY", // malaysia
-            "PH", // philippines
-            "SG", // singapore
-            "TH", // thailand
-            "BN", // brunai
-            "LA", // laos
-            "MM", // myanmar
-            "KH", // cambodia
-            "VN"  // vietname
-        };
         Stopwatch stopwatch = new Stopwatch();
         #endregion
 
@@ -58,14 +44,14 @@ namespace covid19phlib.ViewModels
 
                 if (value != null && value.Id != 0)
                 {
-                    var t = Task.Run(new System.Action(async () =>
-                    {
-                        await RefreshData(value.ListFilter);
-                    }));
-                    t.ConfigureAwait(false);
+                    //    var t = Task.Run(new System.Action(async () =>
+                    //    {
+                    //        await RefreshData(value.ListFilter);
+                    //    }));
+                    //    t.ConfigureAwait(false);
 
-                    //var uiContent = SynchronizationContext.Current;
-                    //uiContent.Send(x => RefreshData(value.ListFilter), null);
+                    //    //var uiContent = SynchronizationContext.Current;
+                    //    //uiContent.Send(x => RefreshData(value.ListFilter), null);
                 }
             }
         }
@@ -114,6 +100,28 @@ namespace covid19phlib.ViewModels
             get { return _LastUpdate; }
             set { Set(nameof(LastUpdate), ref _LastUpdate, value); }
         }
+
+        private bool _ShowFilter = false;
+        public bool ShowFilter
+        {
+            get { return _ShowFilter; }
+            set { Set(nameof(ShowFilter), ref _ShowFilter, value); }
+        }
+
+        private string _CountryLookup = null;
+        public string CountryLookup
+        {
+            get { return _CountryLookup; }
+            set
+            {
+                Set(nameof(CountryLookup), ref _CountryLookup, value);
+
+                if(!string.IsNullOrWhiteSpace(value))
+                {
+                    SearchCountry();
+                }
+            }
+        }
         #endregion
 
         #region commands
@@ -122,11 +130,15 @@ namespace covid19phlib.ViewModels
         public ICommand Command_SortByRecovered { get; set; }
         public ICommand Command_SortByDeaths { get; set; }
         public ICommand Command_PullRefresh { get; set; }
+        public ICommand Command_ShowFilter { get; set; }
+        public ICommand Command_ApplyFilter { get; set; }
         #endregion
 
         #region ctors
-        public ViewModel_Dashboard(IIoC ioc)
+        public ViewModel_Dashboard(IIoC ioc, IAPILocator api)
         {
+            this.API = api;
+
             this._ioc = ioc;
 
             InitCommands();
@@ -159,6 +171,23 @@ namespace covid19phlib.ViewModels
         {
             await RefreshData(this._currentFilter);
         }
+
+        void Command_ShowFilter_Click()
+        {
+            this.ShowFilter = !this.ShowFilter;
+        }
+
+        void Command_ApplyFilter_Click()
+        {
+            var t = Task.Run(new System.Action(async () =>
+            {
+                await RefreshData(this.SelectedFilter.ListFilter);
+            }));
+            t.ConfigureAwait(false);
+
+            //    //var uiContent = SynchronizationContext.Current;
+            //    //uiContent.Send(x => RefreshData(value.ListFilter), null);
+        }
         #endregion
 
         #region methods
@@ -169,6 +198,8 @@ namespace covid19phlib.ViewModels
             if (Command_SortByRecovered == null) Command_SortByRecovered = new RelayCommand(Command_SortByRecovered_Click);
             if (Command_SortByDeaths == null) Command_SortByDeaths = new RelayCommand(Command_SortByDeaths_Click);
             if (Command_PullRefresh == null) Command_PullRefresh = new RelayCommand(Command_PullRefresh_Click);
+            if (Command_ShowFilter == null) Command_ShowFilter = new RelayCommand(Command_ShowFilter_Click);
+            if (Command_ApplyFilter == null) Command_ApplyFilter = new RelayCommand(Command_ApplyFilter_Click);
         }
 
         void DesignData()
@@ -209,35 +240,39 @@ namespace covid19phlib.ViewModels
 
             this._currentFilter = listFilter;
 
-            var apiloc = this._ioc.GI<APILocator>();
-            var res = await apiloc.Country.GetCountryData();
+            ResponseData responseData = null;
 
-            if (res.Status)
+            if (listFilter == Enums_ListFilter.GLOBAL || listFilter == Enums_ListFilter.NONE)
             {
-                var countryData = (List<DTO_Model_CountryData>)res.Result;
-                List<DTO_Model_CountryData> countryDataList = countryData.ToList();
+                responseData = await this.API.Country.GetGlobal();
+            }
+            else if (listFilter == Enums_ListFilter.ASEAN)
+            {
+                responseData = await this.API.Country.GetASEAN();
+            }
 
-                if (listFilter == Enums_ListFilter.GLOBAL || listFilter == Enums_ListFilter.NONE)
-                {
-                    countryDataList = countryDataList.OrderByDescending(x => x.totalConfirmed).ToList();
-                }
-                else if (listFilter == Enums_ListFilter.ASEAN)
-                {
-                    countryDataList = countryDataList.Where(x => this._asean.Contains(x.countryCode)).OrderByDescending(x => x.totalConfirmed).ToList();
-                }
+            if (responseData.Status)
+            {
+                List<DTO_Model_CountryData> countryDataList = (List<DTO_Model_CountryData>)responseData.Result;
 
-                countryData = null;
-
-                // update local store for sorting
+                if (countryDataList != null)
                 {
-                    this._localStore.Clear();
-                    for (int i = 0; i < countryDataList.Count; i++)
+                    // update local store for sorting
                     {
-                        this._localStore.Add(countryDataList[i]);
+                        this._localStore.Clear();
+                        for (int i = 0; i < countryDataList.Count; i++)
+                        {
+                            this._localStore.Add(countryDataList[i]);
+                        }
                     }
-                }
 
-                RefreshList(countryDataList);
+                    RefreshList(countryDataList);
+                }
+                else
+                {
+                    // no data
+                    Debug.WriteLine("DEBUG> NO DATA");
+                }
             }
             else
             {
@@ -413,6 +448,16 @@ namespace covid19phlib.ViewModels
             RefreshList(this._localStore);
 
             this.IsLoading = false;
+        }
+
+        void SearchCountry()
+        {
+            var country = this.Countries.Where(x => x.CountryName.ToLowerInvariant().Contains(this.CountryLookup.ToLowerInvariant())).FirstOrDefault();
+
+            if (country != null)
+            {
+                this.OnCountryLookupFound?.Invoke(this, country);
+            }
         }
 
         #endregion

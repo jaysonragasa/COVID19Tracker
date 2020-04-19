@@ -21,6 +21,11 @@ namespace COVID19Tracker.Xamarin
             Device.BeginInvokeOnMainThread(async () =>
             {
                 await ((ViewModelLocator)this.BindingContext).Dashboard.RefreshData();
+
+                ((ViewModelLocator)this.BindingContext).Dashboard.OnCountryLookupFound += (s, c) =>
+                {
+                    lvCountries.ScrollTo(c, ScrollToPosition.Start, true);
+                };
             });
         }
     }
