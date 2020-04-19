@@ -1,5 +1,4 @@
 ﻿using covid19phlib.DTO_Models;
-using covid19phlib.Interfaces;
 using COVID19Tracker.Library.APIClient.Interfaces;
 using Newtonsoft.Json;
 using System.Collections.Generic;
