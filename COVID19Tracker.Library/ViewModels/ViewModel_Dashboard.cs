@@ -182,6 +182,7 @@ namespace covid19phlib.ViewModels
             var t = Task.Run(new System.Action(async () =>
             {
                 await RefreshData(this.SelectedFilter.ListFilter);
+                this.CountryLookup = null;
             }));
             t.ConfigureAwait(false);
 

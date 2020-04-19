@@ -20,7 +20,7 @@
             </StackLayout>
         </Frame>
 
-        <Grid Grid.Row="1" BackgroundColor="White">
+        <Grid Grid.Row="1" jio:GridEx.RowDefinitions="* ~" BackgroundColor="White">
             <Frame Margin="5,0,5,5">
                 <Grid jio:GridEx.RowDefinitions="~ ~ * ~">
                     <Grid BackgroundColor="#FFE49075" Margin="0,0,0,10">
@@ -99,7 +99,7 @@
                 </Grid>
             </Frame>
 
-            <Grid VerticalOptions="End" BackgroundColor="White" IsVisible="{Binding Dashboard.ShowFilter}">
+            <Grid VerticalOptions="End" BackgroundColor="White" IsVisible="{Binding Dashboard.ShowFilter}" Grid.Row="1">
                 <StackLayout Margin="10">
                     <Label Text="Filter" />
                     <Grid jio:GridEx.ColumnDefinitions="* *">
@@ -111,7 +111,7 @@
                         <Button Text="Apply Filter" Command="{Binding Dashboard.Command_ApplyFilter}" Grid.Column="1" />
                     </Grid>
 
-                    <Editor Placeholder="Search by country" Text="{Binding Dashboard.CountryLookup}" />
+                    <Entry Placeholder="Search by country" Text="{Binding Dashboard.CountryLookup}" />
                 </StackLayout>
 
                 <Grid HeightRequest="1" BackgroundColor="#20000000" VerticalOptions="Start" HorizontalOptions="FillAndExpand" />
