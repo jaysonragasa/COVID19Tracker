@@ -17,14 +17,14 @@ namespace covid19phlib.ViewModels
     public class ViewModel_Dashboard : VMBase
     {
         #region events
-
+        public event EventHandler<Model_CountryData> OnCountryLookupFound;
         #endregion
 
         #region vars
         
         int i = 0;
         Enums_ListFilter _currentFilter = Enums_ListFilter.NONE;
-        IIoC _ioc;
+        IIoC _ioc = null;
         List<DTO_Model_CountryData> _localStore = new List<DTO_Model_CountryData>();
         Stopwatch stopwatch = new Stopwatch();
         #endregion
@@ -44,14 +44,14 @@ namespace covid19phlib.ViewModels
 
                 if (value != null && value.Id != 0)
                 {
-                    var t = Task.Run(new System.Action(async () =>
-                    {
-                        await RefreshData(value.ListFilter);
-                    }));
-                    t.ConfigureAwait(false);
+                    //    var t = Task.Run(new System.Action(async () =>
+                    //    {
+                    //        await RefreshData(value.ListFilter);
+                    //    }));
+                    //    t.ConfigureAwait(false);
 
-                    //var uiContent = SynchronizationContext.Current;
-                    //uiContent.Send(x => RefreshData(value.ListFilter), null);
+                    //    //var uiContent = SynchronizationContext.Current;
+                    //    //uiContent.Send(x => RefreshData(value.ListFilter), null);
                 }
             }
         }
@@ -100,6 +100,28 @@ namespace covid19phlib.ViewModels
             get { return _LastUpdate; }
             set { Set(nameof(LastUpdate), ref _LastUpdate, value); }
         }
+
+        private bool _ShowFilter = false;
+        public bool ShowFilter
+        {
+            get { return _ShowFilter; }
+            set { Set(nameof(ShowFilter), ref _ShowFilter, value); }
+        }
+
+        private string _CountryLookup = null;
+        public string CountryLookup
+        {
+            get { return _CountryLookup; }
+            set
+            {
+                Set(nameof(CountryLookup), ref _CountryLookup, value);
+
+                if(!string.IsNullOrWhiteSpace(value))
+                {
+                    SearchCountry();
+                }
+            }
+        }
         #endregion
 
         #region commands
@@ -108,6 +130,8 @@ namespace covid19phlib.ViewModels
         public ICommand Command_SortByRecovered { get; set; }
         public ICommand Command_SortByDeaths { get; set; }
         public ICommand Command_PullRefresh { get; set; }
+        public ICommand Command_ShowFilter { get; set; }
+        public ICommand Command_ApplyFilter { get; set; }
         #endregion
 
         #region ctors
@@ -147,6 +171,23 @@ namespace covid19phlib.ViewModels
         {
             await RefreshData(this._currentFilter);
         }
+
+        void Command_ShowFilter_Click()
+        {
+            this.ShowFilter = !this.ShowFilter;
+        }
+
+        void Command_ApplyFilter_Click()
+        {
+            var t = Task.Run(new System.Action(async () =>
+            {
+                await RefreshData(this.SelectedFilter.ListFilter);
+            }));
+            t.ConfigureAwait(false);
+
+            //    //var uiContent = SynchronizationContext.Current;
+            //    //uiContent.Send(x => RefreshData(value.ListFilter), null);
+        }
         #endregion
 
         #region methods
@@ -157,6 +198,8 @@ namespace covid19phlib.ViewModels
             if (Command_SortByRecovered == null) Command_SortByRecovered = new RelayCommand(Command_SortByRecovered_Click);
             if (Command_SortByDeaths == null) Command_SortByDeaths = new RelayCommand(Command_SortByDeaths_Click);
             if (Command_PullRefresh == null) Command_PullRefresh = new RelayCommand(Command_PullRefresh_Click);
+            if (Command_ShowFilter == null) Command_ShowFilter = new RelayCommand(Command_ShowFilter_Click);
+            if (Command_ApplyFilter == null) Command_ApplyFilter = new RelayCommand(Command_ApplyFilter_Click);
         }
 
         void DesignData()
@@ -405,6 +448,16 @@ namespace covid19phlib.ViewModels
             RefreshList(this._localStore);
 
             this.IsLoading = false;
+        }
+
+        void SearchCountry()
+        {
+            var country = this.Countries.Where(x => x.CountryName.ToLowerInvariant().Contains(this.CountryLookup.ToLowerInvariant())).FirstOrDefault();
+
+            if (country != null)
+            {
+                this.OnCountryLookupFound?.Invoke(this, country);
+            }
         }
 
         #endregion
