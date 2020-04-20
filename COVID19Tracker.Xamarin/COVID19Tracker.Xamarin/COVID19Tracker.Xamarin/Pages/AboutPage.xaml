@@ -6,6 +6,7 @@
              mc:Ignorable="d"
              x:Class="COVID19Tracker.Xamarin.AboutPage"
              NavigationPage.BackButtonTitle="About"
+             BackgroundColor="#DF29353D"
              >
     <ContentPage.Content>
         <StackLayout Margin="10" VerticalOptions="Start">

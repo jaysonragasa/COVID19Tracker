@@ -3,6 +3,8 @@
     public enum Enum_NavService_Pages
     {
         Main,
-        About
+        About,
+        RegionPage,
+        CityPage
     }
 }

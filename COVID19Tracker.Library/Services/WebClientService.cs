@@ -22,8 +22,8 @@ namespace covid19phlib.Services
             {
                 _httpClient = new HttpClient()
                 {
-                    MaxResponseContentBufferSize = 1000000,
-                    Timeout = TimeSpan.FromSeconds(5)
+                    //MaxResponseContentBufferSize = 1000000,
+                    Timeout = TimeSpan.FromSeconds(30)
                 };
 
                 var authData = _connectionKey;

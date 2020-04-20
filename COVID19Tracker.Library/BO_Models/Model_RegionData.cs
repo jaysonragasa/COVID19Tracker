@@ -1,19 +1,19 @@
 ﻿using GalaSoft.MvvmLight;
 
-namespace covid19phlib.BO_Models
+namespace COVID19Tracker.Library.BO_Models
 {
-	public class Model_CountryData : ViewModelBase
+    public class Model_RegionData : ViewModelBase
     {
-		public string CountryCode { get; set; } = string.Empty;
+		public string RegionCode { get; set; } = string.Empty;
 
-		private string _CountryName = string.Empty;
-		public string CountryName
-		{
-			get { return _CountryName; }
-			set { Set(nameof(CountryName), ref _CountryName, value); }
-		}
+        private string _RegionName = string.Empty;
+        public string RegionName
+        {
+            get { return _RegionName; }
+            set { Set(nameof(RegionName), ref _RegionName, value); }
+        }
 
-		private int _TotalConfirmed = 0;
+        private int _TotalConfirmed = 0;
 		public int TotalConfirmed
 		{
 			get { return _TotalConfirmed; }

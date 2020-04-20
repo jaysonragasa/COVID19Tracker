@@ -2,7 +2,6 @@
 using covid19phlib.Services;
 using COVID19Tracker.Library.Interfaces;
 using COVID19Tracker.Xamarin.Service;
-using GalaSoft.MvvmLight.Ioc;
 using Xamarin.Forms;
 
 namespace COVID19Tracker.Xamarin
@@ -18,17 +17,18 @@ namespace COVID19Tracker.Xamarin
             InitializeComponent();
 
             this._ioc = new IoC();
+            this._ioc.Reg<INavService, NavService>();
 
             MainPage = new NavigationPage(new MainPage());
 
             RegisterPages();
+
+            //this.Nav.GoToPage(Library.Enums.Enum_NavService_Pages.RegionPage, "PH");
+            //this.Nav.GoToPage(Library.Enums.Enum_NavService_Pages.CityPage, "NCR");
         }
 
         void RegisterPages()
         {
-            // Register our Navigtaion interface to use NavService class
-            this._ioc.Reg<INavService, NavService>();
-
             // and get the instnace of this NavService
             Nav = this._ioc.GI<INavService>();
             Nav.NavPage = MainPage.Navigation;
