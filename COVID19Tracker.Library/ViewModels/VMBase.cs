@@ -74,7 +74,7 @@ namespace covid19phlib.ViewModels
             set { Set(nameof(ShowFilter), ref _ShowFilter, value); }
         }
 
-        public ICommand Command_SortByCountryName { get; set; }
+        public ICommand Command_SortByName { get; set; }
         public ICommand Command_SortByConfirmedCases { get; set; }
         public ICommand Command_SortByRecovered { get; set; }
         public ICommand Command_SortByDeaths { get; set; }
@@ -86,20 +86,21 @@ namespace covid19phlib.ViewModels
 
         public virtual void InitCommands()
         {
-            if (Command_SortByCountryName == null) Command_SortByCountryName = new RelayCommand(Command_SortByCountryName_Click);
+            if (Command_SortByName == null) Command_SortByName = new RelayCommand(Command_SortByName_Click);
             if (Command_SortByConfirmedCases == null) Command_SortByConfirmedCases = new RelayCommand(Command_SortByConfirmedCases_Click);
             if (Command_SortByRecovered == null) Command_SortByRecovered = new RelayCommand(Command_SortByRecovered_Click);
             if (Command_SortByDeaths == null) Command_SortByDeaths = new RelayCommand(Command_SortByDeaths_Click);
 
+            if (Command_PullRefresh == null) Command_PullRefresh = new RelayCommand(Command_PullRefresh_Click);
             if (Command_About == null) Command_About = new RelayCommand(Command_About_Click);
             if (Command_ShowFilter == null) Command_ShowFilter = new RelayCommand(Command_ShowFilter_Click);
             if (Command_ApplyFilter == null) Command_ApplyFilter = new RelayCommand(Command_ApplyFilter_Click);
             if (Command_Back == null) Command_Back = new RelayCommand(Command_Back_Click);
         }
 
-        public void Command_SortByCountryName_Click()
+        public void Command_SortByName_Click()
         {
-            SortByCountryName();
+            SortByName();
         }
 
         public void Command_SortByConfirmedCases_Click()
@@ -142,7 +143,7 @@ namespace covid19phlib.ViewModels
             this.Nav.GoBack();
         }
 
-        public abstract void SortByCountryName();
+        public abstract void SortByName();
         public abstract void SortByConfirmedCase();
         public abstract void SortByRecovery();
         public abstract void SortByDeaths();

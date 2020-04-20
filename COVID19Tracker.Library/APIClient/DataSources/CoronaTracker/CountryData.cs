@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace COVID19Tracker.Library.APIClient.DataSources.CoronaTracker
 {
-    public class CountryData : CountryDataBase, ICountryData
+    public class CountryData : DataSourceBase, ICountryData
     {
         public CountryData(IWebClientService webClientService)
         {

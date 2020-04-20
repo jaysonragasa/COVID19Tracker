@@ -4,6 +4,7 @@
     {
         Main,
         About,
-        RegionPage
+        RegionPage,
+        CityPage
     }
 }

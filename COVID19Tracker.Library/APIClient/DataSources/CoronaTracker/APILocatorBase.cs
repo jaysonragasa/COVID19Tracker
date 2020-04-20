@@ -15,6 +15,7 @@ namespace COVID19Tracker.Library.APIClient.DataSources.CoronaTracker
         {
             _webClientService = new WebClientService();
             this.Country = new CountryData(this._webClientService);
+            this.CountryDetailedData = new CountryDetailedData(this._webClientService);
         }
     }
 }

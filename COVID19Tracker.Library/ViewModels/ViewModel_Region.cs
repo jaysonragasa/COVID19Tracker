@@ -5,12 +5,14 @@ using COVID19Tracker.Library.APIClient.Interfaces;
 using COVID19Tracker.Library.BO_Models;
 using COVID19Tracker.Library.DTO_Models;
 using COVID19Tracker.Library.Interfaces;
+using GalaSoft.MvvmLight.Command;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace COVID19Tracker.Library.ViewModels
 {
@@ -46,7 +48,7 @@ namespace COVID19Tracker.Library.ViewModels
         #endregion
 
         #region commands
-
+        public ICommand Command_SelectedRegion { get; set; }
         #endregion
 
         #region ctors
@@ -64,13 +66,18 @@ namespace COVID19Tracker.Library.ViewModels
         #endregion
 
         #region command methods
-
+        void Command_SelectedRegion_Click(Model_RegionData countryData)
+        {
+            this.Nav.GoToPage(COVID19Tracker.Library.Enums.Enum_NavService_Pages.CityPage, countryData.RegionName);
+        }
         #endregion
 
         #region methods
         public override void InitCommands()
         {
             base.InitCommands();
+
+            if (Command_SelectedRegion == null) Command_SelectedRegion = new RelayCommand<Model_RegionData>(Command_SelectedRegion_Click);
         }
 
         void DesignData()
@@ -219,7 +226,7 @@ namespace COVID19Tracker.Library.ViewModels
             Debug.WriteLine("DEBUG> refresh duration: " + stopwatch.ElapsedMilliseconds + "ms - total items: " + source.Count);
         }
 
-        public override void SortByCountryName()
+        public override void SortByName()
         {
             this.IsLoading = true;
 

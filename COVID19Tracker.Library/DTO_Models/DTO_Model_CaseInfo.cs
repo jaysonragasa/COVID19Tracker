@@ -5,12 +5,12 @@
         /// <summary>
         /// Random code assigned for labelling cases; does not equate to the unique case number assigned by DOH
         /// </summary>
-        public string CaseCode { get; set; } = null;
+        public string CaseCode { get; set; }
 
         /// <summary>
         /// Age
         /// </summary>
-        public int Age { get; set; } = 0;
+        public int? Age { get; set; }
 
         /// <summary>
         /// Five-year age group

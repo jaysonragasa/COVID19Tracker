@@ -69,7 +69,7 @@ namespace COVID19Tracker.Library.ViewModels
 
         }
 
-        public override void SortByCountryName()
+        public override void SortByName()
         {
             throw new NotImplementedException();
         }

@@ -2,7 +2,7 @@
 
 namespace COVID19Tracker.Library.APIClient.DataSources
 {
-    public class CountryDataBase
+    public class DataSourceBase
     {
         public IWebClientService Web { get; set; } = null;
 

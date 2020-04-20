@@ -1,4 +1,4 @@
-﻿using COVID19Tracker.Library.APIClient.DataSources.Demo;
+﻿using COVID19Tracker.Library.APIClient.DataSources.CoronaTracker;
 
 namespace covid19phlib.APIClient
 {

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace COVID19Tracker.Library.APIClient.DataSources.Demo
 {
-    public class CountryData : CountryDataBase, ICountryData
+    public class CountryData : DataSourceBase, ICountryData
     {
         string jsondata = @"[
   {

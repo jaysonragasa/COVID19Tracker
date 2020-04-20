@@ -34,7 +34,7 @@
                     <Grid Grid.Row="1" jio:GridEx.ColumnDefinitions="1*,*,*,*" HeightRequest="30">
                         <Label Text="Country" FontAttributes="Bold" Grid.Column="0" FontSize="13">
                             <Label.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding Dashboard.Command_SortByCountryName}" />
+                                <TapGestureRecognizer Command="{Binding Dashboard.Command_SortByName}" />
                             </Label.GestureRecognizers>
                         </Label>
                         <Label Text="Confirmed" TextColor="#FFF4C363" FontAttributes="Bold" Grid.Column="1" FontSize="13"  HorizontalTextAlignment="Center">

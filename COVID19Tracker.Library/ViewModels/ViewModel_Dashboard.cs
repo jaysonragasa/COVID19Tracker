@@ -110,7 +110,6 @@ namespace covid19phlib.ViewModels
         {
             base.InitCommands();
 
-            if (Command_PullRefresh == null) Command_PullRefresh = new RelayCommand(Command_PullRefresh_Click);
             if (Command_SelectedCountry == null) Command_SelectedCountry = new RelayCommand<Model_CountryData>(Command_SelectedCountry_Click);
         }
 
@@ -320,7 +319,7 @@ namespace covid19phlib.ViewModels
             Debug.WriteLine("DEBUG> refresh duration: " + stopwatch.ElapsedMilliseconds + "ms - total items: " + source.Count);
         }
 
-        public override void SortByCountryName()
+        public override void SortByName()
         {
             this.IsLoading = true;
 

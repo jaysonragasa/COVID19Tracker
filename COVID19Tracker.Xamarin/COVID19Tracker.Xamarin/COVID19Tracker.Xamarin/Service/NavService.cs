@@ -1,5 +1,6 @@
 ﻿using COVID19Tracker.Library.Enums;
 using COVID19Tracker.Library.Interfaces;
+using COVID19Tracker.Xamarin.Pages;
 using System;
 using Xamarin.Forms;
 
@@ -28,6 +29,9 @@ namespace COVID19Tracker.Xamarin.Service
                     break;
                 case Enum_NavService_Pages.RegionPage:
                     ((INavigation)this.NavPage).PushAsync(new RegionPage(param));
+                    break;
+                case Enum_NavService_Pages.CityPage:
+                    ((INavigation)this.NavPage).PushAsync(new CityPage(param));
                     break;
             }
         }

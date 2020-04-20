@@ -23,7 +23,8 @@ namespace COVID19Tracker.Xamarin
 
             RegisterPages();
 
-            this.Nav.GoToPage(Library.Enums.Enum_NavService_Pages.RegionPage, "PH");
+            //this.Nav.GoToPage(Library.Enums.Enum_NavService_Pages.RegionPage, "PH");
+            //this.Nav.GoToPage(Library.Enums.Enum_NavService_Pages.CityPage, "NCR");
         }
 
         void RegisterPages()
