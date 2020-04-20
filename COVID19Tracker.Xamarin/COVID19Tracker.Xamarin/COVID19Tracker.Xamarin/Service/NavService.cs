@@ -26,8 +26,8 @@ namespace COVID19Tracker.Xamarin.Service
                 case Enum_NavService_Pages.About:
                     ((INavigation)this.NavPage).PushAsync(new AboutPage());
                     break;
-                case Enum_NavService_Pages.CountryDetailedData:
-                    ((INavigation)this.NavPage).PushAsync(new CountryDetailedDataPage(param));
+                case Enum_NavService_Pages.RegionPage:
+                    ((INavigation)this.NavPage).PushAsync(new RegionPage(param));
                     break;
             }
         }

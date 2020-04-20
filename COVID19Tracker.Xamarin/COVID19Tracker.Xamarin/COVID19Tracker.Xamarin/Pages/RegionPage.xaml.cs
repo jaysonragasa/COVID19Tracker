@@ -1,25 +1,30 @@
-﻿using covid19phlib.ViewModels;
-
+﻿
+using covid19phlib.ViewModels;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace COVID19Tracker.Xamarin
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class CountryDetailedDataPage : ContentPage
+    public partial class RegionPage : ContentPage
     {
-        public CountryDetailedDataPage()
+        public RegionPage()
         {
             InitializeComponent();
         }
 
-        public CountryDetailedDataPage(object param)
+        public RegionPage(object param)
         {
             InitializeComponent();
 
             Device.BeginInvokeOnMainThread(async () =>
             {
                 await ((ViewModelLocator)this.BindingContext).Region.RefreshData(param.ToString());
+
+                ((ViewModelLocator)this.BindingContext).Region.OnRegionLookupFound += (s, c) =>
+                {
+                    lvCountries.ScrollTo(c, ScrollToPosition.MakeVisible, true);
+                };
             });
         }
     }

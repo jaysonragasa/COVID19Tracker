@@ -25,7 +25,7 @@ namespace covid19phlib.ViewModels
         
         int i = 0;
         Enums_ListFilter _currentFilter = Enums_ListFilter.NONE;
-        IIoC _ioc = null;
+        
         List<DTO_Model_CountryData> _localStore = new List<DTO_Model_CountryData>();
         Stopwatch stopwatch = new Stopwatch();
         #endregion
@@ -64,58 +64,6 @@ namespace covid19phlib.ViewModels
             set { Set(nameof(SelectedCountry), ref _SelectedCountry, value); }
         }
 
-        private bool _IsRefreshing = false;
-        // this will be bound to IsRefreshing property in ListView
-        // I could've use the IsLoading but something is not right
-        // when using it.
-        public bool IsRefreshing
-        {
-            get { return _IsRefreshing; }
-            set { Set(nameof(IsRefreshing), ref _IsRefreshing, value); }
-        }
-
-        private int _TotalCases = 0;
-        public int TotalCases
-        {
-            get { return _TotalCases; }
-            set { Set(nameof(TotalCases), ref _TotalCases, value); }
-        }
-
-        private int _TotalActive = 0;
-        public int TotalConfirmed
-        {
-            get { return _TotalActive; }
-            set { Set(nameof(TotalConfirmed), ref _TotalActive, value); }
-        }
-
-        private int _TotalRecovery = 0;
-        public int TotalRecoveries
-        {
-            get { return _TotalRecovery; }
-            set { Set(nameof(TotalRecoveries), ref _TotalRecovery, value); }
-        }
-
-        private int _TotalDetahs = 0;
-        public int TotalDeaths
-        {
-            get { return _TotalDetahs; }
-            set { Set(nameof(TotalDeaths), ref _TotalDetahs, value); }
-        }
-
-        private DateTime _LastUpdate = new DateTime();
-        public DateTime LastUpdate
-        {
-            get { return _LastUpdate; }
-            set { Set(nameof(LastUpdate), ref _LastUpdate, value); }
-        }
-
-        private bool _ShowFilter = false;
-        public bool ShowFilter
-        {
-            get { return _ShowFilter; }
-            set { Set(nameof(ShowFilter), ref _ShowFilter, value); }
-        }
-
         private string _CountryLookup = null;
         public string CountryLookup
         {
@@ -133,14 +81,6 @@ namespace covid19phlib.ViewModels
         #endregion
 
         #region commands
-        public ICommand Command_SortByCountryName { get; set; }
-        public ICommand Command_SortByConfirmedCases { get; set; }
-        public ICommand Command_SortByRecovered { get; set; }
-        public ICommand Command_SortByDeaths { get; set; }
-        public ICommand Command_PullRefresh { get; set; }
-        public ICommand Command_ShowFilter { get; set; }
-        public ICommand Command_ApplyFilter { get; set; }
-        public ICommand Command_About { get; set; }
         public ICommand Command_SelectedCountry { get; set; }
         #endregion
 
@@ -149,9 +89,9 @@ namespace covid19phlib.ViewModels
         {
             this.API = api;
 
-            this._ioc = ioc;
+            this.IoC = ioc;
 
-            this.Nav = this._ioc.GI<INavService>();
+            this.Nav = this.IoC.GI<INavService>();
 
             InitCommands();
             RuntimeData();
@@ -159,71 +99,18 @@ namespace covid19phlib.ViewModels
         #endregion
 
         #region command methods
-        void Command_SortByCountryName_Click()
-        {
-            SortByCountryName();
-        }
-
-        void Command_SortByConfirmedCases_Click()
-        {
-            SortByConfirmedCase();
-        }
-
-        void Command_SortByRecovered_Click()
-        {
-            SortByRecovery();
-        }
-
-        void Command_SortByDeaths_Click()
-        {
-            SortByDeaths();
-        }
-
-        async void Command_PullRefresh_Click()
-        {
-            await RefreshData(this._currentFilter);
-        }
-
-        void Command_ShowFilter_Click()
-        {
-            this.ShowFilter = !this.ShowFilter;
-        }
-
-        void Command_ApplyFilter_Click()
-        {
-            var t = Task.Run(new System.Action(async () =>
-            {
-                await RefreshData(this.SelectedFilter.ListFilter);
-                this.CountryLookup = null;
-            }));
-            t.ConfigureAwait(false);
-
-            //    //var uiContent = SynchronizationContext.Current;
-            //    //uiContent.Send(x => RefreshData(value.ListFilter), null);
-        }
-
-        void Command_About_Click()
-        {
-            this.Nav.GoToPage(COVID19Tracker.Library.Enums.Enum_NavService_Pages.About);
-        }
-
         void Command_SelectedCountry_Click(Model_CountryData countryData)
         {
-            this.Nav.GoToPage(COVID19Tracker.Library.Enums.Enum_NavService_Pages.CountryDetailedData);
+            this.Nav.GoToPage(COVID19Tracker.Library.Enums.Enum_NavService_Pages.RegionPage, countryData.CountryCode);
         }
         #endregion
 
         #region methods
-        void InitCommands()
+        public override void InitCommands()
         {
-            if (Command_SortByCountryName == null) Command_SortByCountryName = new RelayCommand(Command_SortByCountryName_Click);
-            if (Command_SortByConfirmedCases == null) Command_SortByConfirmedCases = new RelayCommand(Command_SortByConfirmedCases_Click);
-            if (Command_SortByRecovered == null) Command_SortByRecovered = new RelayCommand(Command_SortByRecovered_Click);
-            if (Command_SortByDeaths == null) Command_SortByDeaths = new RelayCommand(Command_SortByDeaths_Click);
+            base.InitCommands();
+
             if (Command_PullRefresh == null) Command_PullRefresh = new RelayCommand(Command_PullRefresh_Click);
-            if (Command_ShowFilter == null) Command_ShowFilter = new RelayCommand(Command_ShowFilter_Click);
-            if (Command_ApplyFilter == null) Command_ApplyFilter = new RelayCommand(Command_ApplyFilter_Click);
-            if (Command_About == null) Command_About = new RelayCommand(Command_About_Click);
             if (Command_SelectedCountry == null) Command_SelectedCountry = new RelayCommand<Model_CountryData>(Command_SelectedCountry_Click);
         }
 
@@ -278,10 +165,10 @@ namespace covid19phlib.ViewModels
 
             if (responseData.Status)
             {
-                List<DTO_Model_CountryData> countryDataList = (List<DTO_Model_CountryData>)responseData.Result;
-
-                if (countryDataList != null)
+                if (responseData.Result != null)
                 {
+                    List<DTO_Model_CountryData> countryDataList = (List<DTO_Model_CountryData>)responseData.Result;
+
                     // update local store for sorting
                     {
                         this._localStore.Clear();
@@ -433,7 +320,7 @@ namespace covid19phlib.ViewModels
             Debug.WriteLine("DEBUG> refresh duration: " + stopwatch.ElapsedMilliseconds + "ms - total items: " + source.Count);
         }
 
-        void SortByCountryName()
+        public override void SortByCountryName()
         {
             this.IsLoading = true;
 
@@ -444,7 +331,7 @@ namespace covid19phlib.ViewModels
             this.IsLoading = false;
         }
 
-        void SortByConfirmedCase()
+        public override void SortByConfirmedCase()
         {
             this.IsLoading = true;
 
@@ -455,7 +342,7 @@ namespace covid19phlib.ViewModels
             this.IsLoading = false;
         }
 
-        void SortByRecovery()
+        public override void SortByRecovery()
         {
             this.IsLoading = true;
 
@@ -466,7 +353,7 @@ namespace covid19phlib.ViewModels
             this.IsLoading = false;
         }
 
-        void SortByDeaths()
+        public override void SortByDeaths()
         {
             this.IsLoading = true;
 
@@ -475,6 +362,24 @@ namespace covid19phlib.ViewModels
             RefreshList(this._localStore);
 
             this.IsLoading = false;
+        }
+
+        public override void ApplyFilter()
+        {
+            var t = Task.Run(new System.Action(async () =>
+            {
+                await RefreshData(this.SelectedFilter.ListFilter);
+                this.CountryLookup = null;
+            }));
+            t.ConfigureAwait(false);
+
+            //    //var uiContent = SynchronizationContext.Current;
+            //    //uiContent.Send(x => RefreshData(value.ListFilter), null);
+        }
+
+        public override async Task PullToRefresh()
+        {
+            await RefreshData(this._currentFilter);
         }
 
         void SearchCountry()

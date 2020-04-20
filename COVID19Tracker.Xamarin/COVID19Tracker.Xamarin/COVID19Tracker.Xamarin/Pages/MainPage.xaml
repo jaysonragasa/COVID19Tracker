@@ -12,20 +12,20 @@
              BindingContext="{Binding Source={StaticResource Locator}}"
              >
 
-    <Grid jio:GridEx.RowDefinitions="auto,*,auto" BackgroundColor="#FF686868">
-        <Grid jio:GridEx.RowColumn="0 3">
-            <Image Source="facemasks.jpg" Aspect="AspectFill" />
-        </Grid>
-        
-        <Grid Grid.Row="0" BackgroundColor="#eeffffff" Margin="10,10,10,0">
-            <StackLayout Margin="10">
+    <Grid jio:GridEx.RowDefinitions="auto,*,auto">
+        <Grid Grid.Row="0" HeightRequest="50">
+            <Grid>
+                <Image Source="facemasks.jpg" Aspect="AspectFill" />
+            </Grid>
+            <Grid BackgroundColor="#DF29353D" />
+
+            <StackLayout Margin="10" VerticalOptions="Center">
                 <Label Text="COVID-19 Tracker" FontSize="20" />
-                <Label Text="data: coronatracker.com" FontSize="10" />
             </StackLayout>
         </Grid>
 
-        <Grid Grid.Row="1" jio:GridEx.RowDefinitions="* ~" >
-            <Grid Margin="10" BackgroundColor="#eeffffff">
+        <Grid Grid.Row="1" jio:GridEx.RowDefinitions="* ~" BackgroundColor="#FF29353D">
+            <Grid Margin="10">
                 <Grid jio:GridEx.RowDefinitions="~ ~ * ~" Margin="10">
                     <Grid BackgroundColor="#FFE49075" Margin="0,0,0,10">
                         <Label Text="Tap on the headers to sort the cases. Pull down the list to refresh." FontSize="10" Margin="10" TextColor="White" />
@@ -109,7 +109,7 @@
                 </Grid>
             </Grid>
 
-            <Grid VerticalOptions="End" BackgroundColor="White" IsVisible="{Binding Dashboard.ShowFilter}" Grid.Row="1">
+            <Grid VerticalOptions="End" BackgroundColor="#FF252526" IsVisible="{Binding Dashboard.ShowFilter}" Grid.Row="1">
                 <StackLayout Margin="10">
                     <Label Text="Filter" />
                     <Grid jio:GridEx.ColumnDefinitions="* *">
@@ -128,7 +128,7 @@
             </Grid>
         </Grid>
 
-        <Grid Grid.Row="2" BackgroundColor="White">
+        <Grid Grid.Row="2" BackgroundColor="#FF252526">
             <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
                 <Grid HeightRequest="48" WidthRequest="48">
                     <Label Text="🔎" VerticalOptions="Center"  HorizontalOptions="Center" FontSize="20"/>

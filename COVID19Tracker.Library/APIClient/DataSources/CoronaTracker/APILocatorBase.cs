@@ -9,6 +9,7 @@ namespace COVID19Tracker.Library.APIClient.DataSources.CoronaTracker
     {
         IWebClientService _webClientService;
         public ICountryData Country { get; set; } = null;
+        public ICountryDetailedData CountryDetailedData { get; set; } = null;
 
         public virtual void Initialize()
         {

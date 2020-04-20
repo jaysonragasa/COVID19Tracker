@@ -16,6 +16,22 @@
                 <Setter Property="ColumnSpacing" Value="0" />
                 <Setter Property="RowSpacing" Value="0" />
             </Style>
+
+            <!--<Style TargetType="Grid">
+                <Setter Property="BackgroundColor" Value="#FF1E1E1E" />
+            </Style>-->
+            
+            <Style TargetType="Label">
+                <Setter Property="TextColor" Value="#FFFFFFFF" />
+            </Style>
+            <Style TargetType="Entry">
+                <Setter Property="TextColor" Value="#FFFFFFFF" />
+                <Setter Property="PlaceholderColor" Value="#7FFFFFFF" />
+            </Style>
+            <Style TargetType="Picker">
+                <Setter Property="TitleColor" Value="#7FFFFFFF" />
+                <Setter Property="TextColor" Value="#7FFFFFFF" />
+            </Style>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

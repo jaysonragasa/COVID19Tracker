@@ -4,6 +4,6 @@
     {
         Main,
         About,
-        CountryDetailedData
+        RegionPage
     }
 }

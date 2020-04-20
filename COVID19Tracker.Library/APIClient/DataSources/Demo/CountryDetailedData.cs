@@ -583,10 +583,12 @@ namespace COVID19Tracker.Library.APIClient.DataSources.Demo
         {
             ResponseData responseData = new ResponseData();
 
-            JSONData = JsonConvert.DeserializeObject<List<DTO_Model_CaseInfo>>(this.jsondata);
+            this.JSONData.Clear();
 
             if (countryCode == "PH")
             {
+                JSONData = JsonConvert.DeserializeObject<List<DTO_Model_CaseInfo>>(this.jsondata);
+
                 this.Regions = JSONData.Select(x => x.RegionRes).Distinct().ToList();
                 this.City = JSONData.Select(x => x.ProvCityRes).Distinct().ToList();
                 this.AgeGroup = JSONData.Select(x => x.AgeGroup).Distinct().ToList();
@@ -607,7 +609,7 @@ namespace COVID19Tracker.Library.APIClient.DataSources.Demo
 
             for (int i = 0; i < this.Regions.Count; i++)
             {
-                var currentRegion = this._cache_regions.Where(x => x.RegionRes == this.Regions[i]).ToList();
+                var currentRegion = this.JSONData.Where(x => x.RegionRes == this.Regions[i]).ToList();
 
                 // get confirmed case
                 DTO_Model_Region caseInfo = new DTO_Model_Region()

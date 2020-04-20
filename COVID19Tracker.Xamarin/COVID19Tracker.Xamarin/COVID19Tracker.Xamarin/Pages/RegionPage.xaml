@@ -4,7 +4,7 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             x:Class="COVID19Tracker.Xamarin.CountryDetailedDataPage"
+             x:Class="COVID19Tracker.Xamarin.RegionPage"
              
              xmlns:jio="clr-namespace:Jara.Xaml.Control.Extension;assembly=Jara.Xaml.ControlExtensions.Xamarin"
              x:Name="this"
@@ -110,21 +110,41 @@
 
                 <Grid VerticalOptions="End" BackgroundColor="#FF252526" IsVisible="{Binding Region.ShowFilter}" Grid.Row="1">
                     <StackLayout Margin="10">
-                        <Label Text="Filter" />
-                        <Grid jio:GridEx.ColumnDefinitions="* *">
-                            <Picker ItemsSource="{Binding Dashboard.ListFilter}" 
-                                SelectedItem="{Binding BindingContext.Dashboard.SelectedFilter, Mode=TwoWay, Source={x:Reference this}}" 
-                                ItemDisplayBinding="{Binding ListTypeName}" 
-                                Title="List By" />
-
-                            <Button Text="Apply Filter" Command="{Binding Dashboard.Command_ApplyFilter}" Grid.Column="1" />
-                        </Grid>
-
-                        <Entry Placeholder="Search by country" Text="{Binding Dashboard.CountryLookup}" />
+                        <Entry Placeholder="Search by region name" Text="{Binding Region.RegionLookup}" />
                     </StackLayout>
 
                     <Grid HeightRequest="1" BackgroundColor="#20000000" VerticalOptions="Start" HorizontalOptions="FillAndExpand" />
                 </Grid>
+            </Grid>
+
+            <Grid Grid.Row="2" BackgroundColor="#FF252526">
+                <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+                    <Grid HeightRequest="48" WidthRequest="48">
+                        <Label Text="🔎" VerticalOptions="Center"  HorizontalOptions="Center" FontSize="20"/>
+
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding Region.Command_ShowFilter}" />
+                        </Grid.GestureRecognizers>
+                    </Grid>
+
+                    <Grid HeightRequest="48" WidthRequest="48">
+                        <Label Text="💡" VerticalOptions="Center"  HorizontalOptions="Center" FontSize="20"/>
+
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding Region.Command_About}" />
+                        </Grid.GestureRecognizers>
+                    </Grid>
+
+                    <Grid HeightRequest="48" WidthRequest="48">
+                        <Label Text="◀" VerticalOptions="Center"  HorizontalOptions="Center" FontSize="20"/>
+
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding Region.Command_Back}" />
+                        </Grid.GestureRecognizers>
+                    </Grid>
+                </StackLayout>
+
+                <Grid HeightRequest="1" BackgroundColor="#20000000" VerticalOptions="Start" HorizontalOptions="FillAndExpand" />
             </Grid>
         </Grid>
     </ContentPage.Content>
