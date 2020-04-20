@@ -116,7 +116,7 @@ namespace COVID19Tracker.Library.ViewModels
                         }
                     }
 
-                    RefreshList(dataList);
+                    RefreshList(dataList.OrderByDescending(x => x.Confirmed).ToList());
                 }
                 else
                 {

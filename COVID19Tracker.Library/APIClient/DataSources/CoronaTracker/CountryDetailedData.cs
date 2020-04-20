@@ -2,7 +2,6 @@
 using covid19phlib.Interfaces;
 using COVID19Tracker.Library.APIClient.Interfaces;
 using COVID19Tracker.Library.DTO_Models;
-using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,10 +16,10 @@ namespace COVID19Tracker.Library.APIClient.DataSources.CoronaTracker
         List<DTO_Model_CaseInfo> JSONData = new List<DTO_Model_CaseInfo>();
         List<DTO_Model_CaseInfo> _cache_regions = new List<DTO_Model_CaseInfo>();
         List<DTO_Model_CaseInfo> _cache_city = new List<DTO_Model_CaseInfo>();
-        List<DTO_Model_CaseInfo> _cache_agegroup = new List<DTO_Model_CaseInfo>();
-        List<DTO_Model_CaseInfo> _cache_gender = new List<DTO_Model_CaseInfo>();
-        List<DTO_Model_CaseInfo> _cache_admitted = new List<DTO_Model_CaseInfo>();
-        List<DTO_Model_CaseInfo> _cache_discharged = new List<DTO_Model_CaseInfo>();
+        //List<DTO_Model_CaseInfo> _cache_agegroup = new List<DTO_Model_CaseInfo>();
+        //List<DTO_Model_CaseInfo> _cache_gender = new List<DTO_Model_CaseInfo>();
+        //List<DTO_Model_CaseInfo> _cache_admitted = new List<DTO_Model_CaseInfo>();
+        //List<DTO_Model_CaseInfo> _cache_discharged = new List<DTO_Model_CaseInfo>();
         #endregion
 
         // for filtering purposes
@@ -45,14 +44,17 @@ namespace COVID19Tracker.Library.APIClient.DataSources.CoronaTracker
             {
                 JSONData = await this.Web.GetAsync<List<DTO_Model_CaseInfo>>("https://raw.githubusercontent.com/jaysonragasa/COVID19DataDrop/master/regioncitydata.json");
 
-                this.Regions = JSONData.Select(x => x.RegionRes).Distinct().ToList();
-                this.City = JSONData.Select(x => x.ProvCityRes).Distinct().ToList();
-                this.AgeGroup = JSONData.Select(x => x.AgeGroup).Distinct().ToList();
-                this.Gender = JSONData.Select(x => x.Sex).Distinct().ToList();
-                this.Admitted = JSONData.Select(x => x.Admitted).Distinct().ToList();
+                if (JSONData != null)
+                {
+                    this.Regions = JSONData.Select(x => x.RegionRes).Distinct().ToList();
+                    this.City = JSONData.Select(x => x.ProvCityRes).Distinct().ToList();
+                    this.AgeGroup = JSONData.Select(x => x.AgeGroup).Distinct().ToList();
+                    this.Gender = JSONData.Select(x => x.Sex).Distinct().ToList();
+                    this.Admitted = JSONData.Select(x => x.Admitted).Distinct().ToList();
 
-                responseData.Status = true;
-                responseData.Message = "GetDataByCountryCode";
+                    responseData.Status = true;
+                    responseData.Message = "GetDataByCountryCode";
+                }
             }
 
             return responseData;
@@ -70,7 +72,7 @@ namespace COVID19Tracker.Library.APIClient.DataSources.CoronaTracker
                 // get confirmed case
                 DTO_Model_Region caseInfo = new DTO_Model_Region()
                 {
-                    RegionName = this.Regions[i],
+                    RegionName = string.IsNullOrEmpty(this.Regions[i]) ? "(unknown)" : this.Regions[i],
                     Confirmed = currentRegion.Count
                 };
 
@@ -102,7 +104,7 @@ namespace COVID19Tracker.Library.APIClient.DataSources.CoronaTracker
                 // get confirmed case
                 DTO_Model_City caseInfo = new DTO_Model_City()
                 {
-                    CityName = this.City[i],
+                    CityName = string.IsNullOrEmpty(this.City[i]) ? "(unknown)" : this.City[i],
                     Confirmed = currentCity.Count
                 };
 
