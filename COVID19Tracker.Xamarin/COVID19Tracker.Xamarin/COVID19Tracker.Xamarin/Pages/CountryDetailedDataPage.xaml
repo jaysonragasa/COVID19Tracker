@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="COVID19Tracker.Xamarin.CountryDetailedDataPage"
+             
+             xmlns:jio="clr-namespace:Jara.Xaml.Control.Extension;assembly=Jara.Xaml.ControlExtensions.Xamarin"
+             x:Name="this"
+             NavigationPage.HasNavigationBar="False"
+             BindingContext="{Binding Source={StaticResource Locator}}"
+             >
+    <ContentPage.Content>
+        <Grid jio:GridEx.RowDefinitions="auto,*,auto" BackgroundColor="#FF686868">
+            <Grid jio:GridEx.RowColumn="0 3">
+                <Image Source="facemasks.jpg" Aspect="AspectFill" />
+            </Grid>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

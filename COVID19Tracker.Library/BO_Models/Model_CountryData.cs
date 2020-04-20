@@ -4,6 +4,8 @@ namespace covid19phlib.BO_Models
 {
 	public class Model_CountryData : ViewModelBase
     {
+		public string CountryCode { get; set; } = string.Empty;
+
 		private string _CountryName = string.Empty;
 		public string CountryName
 		{

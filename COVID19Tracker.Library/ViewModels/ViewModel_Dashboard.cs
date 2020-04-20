@@ -57,6 +57,13 @@ namespace covid19phlib.ViewModels
             }
         }
 
+        private Model_CountryData _SelectedCountry = new Model_CountryData();
+        public Model_CountryData SelectedCountry
+        {
+            get { return _SelectedCountry; }
+            set { Set(nameof(SelectedCountry), ref _SelectedCountry, value); }
+        }
+
         private bool _IsRefreshing = false;
         // this will be bound to IsRefreshing property in ListView
         // I could've use the IsLoading but something is not right
@@ -133,8 +140,8 @@ namespace covid19phlib.ViewModels
         public ICommand Command_PullRefresh { get; set; }
         public ICommand Command_ShowFilter { get; set; }
         public ICommand Command_ApplyFilter { get; set; }
-
         public ICommand Command_About { get; set; }
+        public ICommand Command_SelectedCountry { get; set; }
         #endregion
 
         #region ctors
@@ -143,6 +150,8 @@ namespace covid19phlib.ViewModels
             this.API = api;
 
             this._ioc = ioc;
+
+            this.Nav = this._ioc.GI<INavService>();
 
             InitCommands();
             RuntimeData();
@@ -195,9 +204,12 @@ namespace covid19phlib.ViewModels
 
         void Command_About_Click()
         {
-            var nav = this._ioc.GI<INavService>();
+            this.Nav.GoToPage(COVID19Tracker.Library.Enums.Enum_NavService_Pages.About);
+        }
 
-            nav.GoToPage(COVID19Tracker.Library.Enums.Enum_NavService_Pages.About);
+        void Command_SelectedCountry_Click(Model_CountryData countryData)
+        {
+            this.Nav.GoToPage(COVID19Tracker.Library.Enums.Enum_NavService_Pages.CountryDetailedData);
         }
         #endregion
 
@@ -212,6 +224,7 @@ namespace covid19phlib.ViewModels
             if (Command_ShowFilter == null) Command_ShowFilter = new RelayCommand(Command_ShowFilter_Click);
             if (Command_ApplyFilter == null) Command_ApplyFilter = new RelayCommand(Command_ApplyFilter_Click);
             if (Command_About == null) Command_About = new RelayCommand(Command_About_Click);
+            if (Command_SelectedCountry == null) Command_SelectedCountry = new RelayCommand<Model_CountryData>(Command_SelectedCountry_Click);
         }
 
         void DesignData()
@@ -314,6 +327,7 @@ namespace covid19phlib.ViewModels
             {
                 this.Countries.Add(new Model_CountryData()
                 {
+                    CountryCode = source[i].countryCode,
                     CountryName = source[i].country,
                     TotalConfirmed = source[i].totalConfirmed,
                     TotalRecovered = source[i].totalRecovered,
@@ -371,6 +385,7 @@ namespace covid19phlib.ViewModels
                 {
                     this.Countries.Insert(i, new Model_CountryData()
                     {
+                        CountryCode = source[i].countryCode,
                         CountryName = source[i].country,
                         TotalConfirmed = source[i].totalConfirmed,
                         TotalRecovered = source[i].totalRecovered,

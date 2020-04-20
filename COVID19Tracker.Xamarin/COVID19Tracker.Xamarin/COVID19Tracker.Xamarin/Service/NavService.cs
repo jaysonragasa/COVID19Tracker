@@ -19,12 +19,15 @@ namespace COVID19Tracker.Xamarin.Service
             ((INavigation)this.NavPage).PopAsync();
         }
 
-        public void GoToPage(Enum_NavService_Pages routeName)
+        public void GoToPage(Enum_NavService_Pages routeName, object param = null)
         {
             switch(routeName)
             {
                 case Enum_NavService_Pages.About:
                     ((INavigation)this.NavPage).PushAsync(new AboutPage());
+                    break;
+                case Enum_NavService_Pages.CountryDetailedData:
+                    ((INavigation)this.NavPage).PushAsync(new CountryDetailedDataPage(param));
                     break;
             }
         }
