@@ -18,6 +18,7 @@ namespace covid19phlib.ViewModels
     public class ViewModel_Dashboard : VMBase
     {
         #region events
+        public event EventHandler<string> OnShowMessage;
         public event EventHandler<Model_CountryData> OnCountryLookupFound;
         #endregion
 
@@ -181,13 +182,12 @@ namespace covid19phlib.ViewModels
                 }
                 else
                 {
-                    // no data
-                    Debug.WriteLine("DEBUG> NO DATA");
+                    this.OnShowMessage?.Invoke(this, "There are no data to show currently. Try to refresh the page by swiping down on the list.");
                 }
             }
             else
             {
-
+                this.OnShowMessage?.Invoke(this, "There are no data to show currently. Try to refresh the page by swiping down on the list.");
             }
 
             this.IsLoading = false;
@@ -365,12 +365,19 @@ namespace covid19phlib.ViewModels
 
         public override void ApplyFilter()
         {
-            var t = Task.Run(new System.Action(async () =>
+            if (this.SelectedFilter != null)
             {
-                await RefreshData(this.SelectedFilter.ListFilter);
-                this.CountryLookup = null;
-            }));
-            t.ConfigureAwait(false);
+                var t = Task.Run(new System.Action(async () =>
+                {
+                    await RefreshData(this.SelectedFilter.ListFilter);
+                    this.CountryLookup = null;
+                }));
+                t.ConfigureAwait(false);
+            }
+            else
+            {
+                this.OnShowMessage?.Invoke(this, "Please select the type of filter by tapping on \"List By\"");
+            }
 
             //    //var uiContent = SynchronizationContext.Current;
             //    //uiContent.Send(x => RefreshData(value.ListFilter), null);

@@ -25,6 +25,11 @@ namespace COVID19Tracker.Xamarin
                 {
                     lvCountries.ScrollTo(c, ScrollToPosition.MakeVisible, true);
                 };
+
+                ((ViewModelLocator)this.BindingContext).Region.OnShowMessage += async (s, c) =>
+                {
+                    await DisplayAlert(null, c, "ok");
+                };
             });
         }
     }

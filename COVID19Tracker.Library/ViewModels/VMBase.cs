@@ -11,7 +11,7 @@ namespace covid19phlib.ViewModels
 {
 	public abstract class VMBase : ViewModelBase
     {
-		public INavService Nav { get; set; } = null;
+        public INavService Nav { get; set; } = null;
 		public IAPILocator API { get; set; } = null;
         public IIoC IoC { get; set; } = null;
 

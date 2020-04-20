@@ -20,6 +20,7 @@ namespace COVID19Tracker.Library.ViewModels
     {
         #region events
         public event EventHandler<Model_RegionData> OnRegionLookupFound;
+        public event EventHandler<string> OnShowMessage;
         #endregion
 
         #region vars
@@ -131,18 +132,17 @@ namespace COVID19Tracker.Library.ViewModels
                     }
                     else
                     {
-                        // no data
-                        Debug.WriteLine("DEBUG> NO DATA");
+                        this.OnShowMessage?.Invoke(this, "There are no data to show currently. Try to refresh the page by swiping down on the list.");
                     }
                 }
                 else
                 {
-
+                    this.OnShowMessage?.Invoke(this, "There are no data to show currently. Try to refresh the page by swiping down on the list.");
                 }
             }
             else
             {
-                Debug.WriteLine("DEBUG> NO DATA");
+                this.OnShowMessage?.Invoke(this, "There are no data to show currently. Try to refresh the page by swiping down on the list.");
             }
 
             this.IsLoading = false;

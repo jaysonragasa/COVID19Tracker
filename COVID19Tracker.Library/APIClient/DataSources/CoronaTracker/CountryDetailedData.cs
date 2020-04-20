@@ -139,7 +139,7 @@ namespace COVID19Tracker.Library.APIClient.DataSources.CoronaTracker
                 // get confirmed case
                 DTO_Model_City caseInfo = new DTO_Model_City()
                 {
-                    CityName = cityNames[i],
+                    CityName = string.IsNullOrEmpty(cityNames[i]) ? "(unknown)" : cityNames[i],
                     Confirmed = currentCity.Count
                 };
 
