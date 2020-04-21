@@ -104,6 +104,8 @@ namespace COVID19Tracker.Library.ViewModels
 
             _countryCode = countryCode;
 
+            //this.OnShowMessage?.Invoke(this, "This may take several seconds to load due to the volume of data.");
+
             ResponseData responseData = null;
             responseData = await this.API.CountryDetailedData.GetDataByCountryCode(countryCode);
 

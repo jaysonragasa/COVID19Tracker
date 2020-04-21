@@ -10,6 +10,7 @@
              x:Name="this"
              NavigationPage.HasNavigationBar="False"
              BindingContext="{Binding Source={StaticResource Locator}}"
+             BackgroundColor="#FF29353D"
              >
 
     <Grid jio:GridEx.RowDefinitions="auto,*,auto">
@@ -87,7 +88,7 @@
                     <Grid jio:GridEx.GridDefinitions="~ ~ ~/ * * *" Grid.Row="3" Margin="0,3,0,0">
                         <Label Text="Total Confirmed" FontSize="10" Grid.Column="0" Margin="0,5,0,0" />
                         <Label Text="Total Recoveries" FontSize="10" Grid.Column="1" HorizontalTextAlignment="Center" Margin="0,5,0,0" />
-                        <Label Text="Total Deaths" FontSize="10" Grid.Column="2" HorizontalTextAlignment="End" Margin="0,5,0,0" />
+                        <Label Text="Total Deceased" FontSize="10" Grid.Column="2" HorizontalTextAlignment="End" Margin="0,5,0,0" />
 
                         <Label Text="{Binding Dashboard.TotalConfirmed, StringFormat='{}{0:#,0}'}" TextColor="#FFF4C363" Grid.Row="1" Grid.Column="0" />
                         <Label Text="{Binding Dashboard.TotalRecoveries, StringFormat='{}{0:#,0}'}" TextColor="#FF60BB69" Grid.Row="1" Grid.Column="1" HorizontalTextAlignment="Center" />
@@ -109,7 +110,7 @@
                 </Grid>
             </Grid>
 
-            <Grid VerticalOptions="End" BackgroundColor="#FF252526" IsVisible="{Binding Dashboard.ShowFilter}" Grid.Row="1">
+            <Grid VerticalOptions="End" BackgroundColor="#80CA5100" IsVisible="{Binding Dashboard.ShowFilter}" Grid.Row="1">
                 <StackLayout Margin="10">
                     <Label Text="Filter" />
                     <Grid jio:GridEx.ColumnDefinitions="* *">
@@ -128,10 +129,10 @@
             </Grid>
         </Grid>
 
-        <Grid Grid.Row="2" BackgroundColor="#FF252526">
+        <Grid Grid.Row="2" BackgroundColor="#80CA5100">
             <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
                 <Grid HeightRequest="48" WidthRequest="48">
-                    <Label Text="🔎" VerticalOptions="Center"  HorizontalOptions="Center" FontSize="20"/>
+                    <Label Text="🔍" VerticalOptions="Center"  HorizontalOptions="Center" FontSize="20"/>
 
                     <Grid.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding Dashboard.Command_ShowFilter}" />

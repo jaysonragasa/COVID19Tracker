@@ -19,18 +19,20 @@ namespace COVID19Tracker.Xamarin
 
             Device.BeginInvokeOnMainThread(async () =>
             {
-                await ((ViewModelLocator)this.BindingContext).Region.RefreshData(param.ToString());
+                await DisplayAlert(null, "This may take several seconds to load due to the volume of data.", "ok");
 
-                ((ViewModelLocator)this.BindingContext).Region.OnRegionLookupFound += (s, c) =>
-                {
-                    lvCountries.ScrollTo(c, ScrollToPosition.MakeVisible, true);
-                };
-
-                ((ViewModelLocator)this.BindingContext).Region.OnShowMessage += async (s, c) =>
-                {
-                    await DisplayAlert(null, c, "ok");
-                };
+                await ((ViewModelLocator)this.BindingContext).Region.RefreshData(param.ToString());  
             });
+
+            ((ViewModelLocator)this.BindingContext).Region.OnRegionLookupFound += (s, c) =>
+            {
+                lvCountries.ScrollTo(c, ScrollToPosition.MakeVisible, true);
+            };
+
+            ((ViewModelLocator)this.BindingContext).Region.OnShowMessage += async (s, c) =>
+            {
+                await DisplayAlert(null, c, "ok");
+            };
         }
     }
 }

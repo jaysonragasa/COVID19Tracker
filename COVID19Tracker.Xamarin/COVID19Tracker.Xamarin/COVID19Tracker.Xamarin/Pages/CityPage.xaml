@@ -10,6 +10,7 @@
              x:Name="this"
              NavigationPage.HasNavigationBar="False"
              BindingContext="{Binding Source={StaticResource Locator}}"
+             BackgroundColor="#FF29353D"
              >
     <ContentPage.Content>
         <Grid jio:GridEx.RowDefinitions="auto,*,auto" BackgroundColor="#FF686868">
@@ -87,7 +88,7 @@
                         <Grid jio:GridEx.GridDefinitions="~ ~ ~/ * * *" Grid.Row="3" Margin="0,3,0,0">
                             <Label Text="Total Confirmed" FontSize="10" Grid.Column="0" Margin="0,5,0,0" />
                             <Label Text="Total Recoveries" FontSize="10" Grid.Column="1" HorizontalTextAlignment="Center" Margin="0,5,0,0" />
-                            <Label Text="Total Deaths" FontSize="10" Grid.Column="2" HorizontalTextAlignment="End" Margin="0,5,0,0" />
+                            <Label Text="Total Deceased" FontSize="10" Grid.Column="2" HorizontalTextAlignment="End" Margin="0,5,0,0" />
 
                             <Label Text="{Binding City.TotalConfirmed, StringFormat='{}{0:#,0}'}" TextColor="#FFF4C363" Grid.Row="1" Grid.Column="0" />
                             <Label Text="{Binding City.TotalRecoveries, StringFormat='{}{0:#,0}'}" TextColor="#FF60BB69" Grid.Row="1" Grid.Column="1" HorizontalTextAlignment="Center" />
@@ -108,19 +109,19 @@
                     </Grid>
                 </Grid>
 
-                <Grid VerticalOptions="End" BackgroundColor="#FF252526" IsVisible="{Binding City.ShowFilter}" Grid.Row="1">
+                <Grid VerticalOptions="End" BackgroundColor="#80CA5100" IsVisible="{Binding City.ShowFilter}" Grid.Row="1">
                     <StackLayout Margin="10">
-                        <Entry Placeholder="Search by region name" Text="{Binding City.CityLookup}" />
+                        <Entry Placeholder="Search by city name" Text="{Binding City.CityLookup}" />
                     </StackLayout>
 
                     <Grid HeightRequest="1" BackgroundColor="#20000000" VerticalOptions="Start" HorizontalOptions="FillAndExpand" />
                 </Grid>
             </Grid>
 
-            <Grid Grid.Row="2" BackgroundColor="#FF252526">
+            <Grid Grid.Row="2" BackgroundColor="#80CA5100">
                 <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
                     <Grid HeightRequest="48" WidthRequest="48">
-                        <Label Text="🔎" VerticalOptions="Center"  HorizontalOptions="Center" FontSize="20"/>
+                        <Label Text="🔎" VerticalOptions="Center"  HorizontalOptions="Center" FontSize="25"/>
 
                         <Grid.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding City.Command_ShowFilter}" />
