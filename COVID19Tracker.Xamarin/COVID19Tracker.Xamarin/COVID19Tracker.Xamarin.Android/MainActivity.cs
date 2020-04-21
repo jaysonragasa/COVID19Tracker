@@ -11,7 +11,13 @@ using FFImageLoading.Forms.Platform;
 
 namespace COVID19Tracker.Xamarin.Droid
 {
-    [Activity(Label = "COVID19Tracker.Xamarin", Icon = "@mipmap/icon", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    [Activity(
+        Label = "COVID19 Tracker", 
+        Icon = "@drawable/icon", 
+        Theme = "@style/MainTheme", 
+        MainLauncher = true, 
+        ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)
+    ]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
         protected override void OnCreate(Bundle savedInstanceState)
@@ -24,10 +30,10 @@ namespace COVID19Tracker.Xamarin.Droid
             CachedImageRenderer.Init(enableFastRenderer: true);
             CachedImageRenderer.InitImageViewHandler();
 
-#if RELEASE
+//#if RELEASE
             AppCenter.Start("151bf9a6-f3cb-48e7-a989-82aa24d85a70",
                                typeof(Analytics), typeof(Crashes));
-#endif
+//#endif
 
             XamEs.Platform.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);

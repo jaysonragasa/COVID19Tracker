@@ -116,7 +116,9 @@
     <AndroidResource Include="Resources\mipmap-xxxhdpi\icon.png" />
     <AndroidResource Include="Resources\mipmap-xxxhdpi\launcher_foreground.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\icon.png" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\COVID19Tracker.Xamarin\COVID19Tracker.Xamarin.csproj">
       <Project>{D4DC3535-0227-4039-BBDC-0D37A0893A55}</Project>
