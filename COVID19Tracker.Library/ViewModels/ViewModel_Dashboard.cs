@@ -25,8 +25,7 @@ namespace covid19phlib.ViewModels
         #region vars
         
         int i = 0;
-        Enums_ListFilter _currentFilter = Enums_ListFilter.NONE;
-        
+
         List<DTO_Model_CountryData> _localStore = new List<DTO_Model_CountryData>();
         Stopwatch stopwatch = new Stopwatch();
         #endregion
@@ -44,6 +43,7 @@ namespace covid19phlib.ViewModels
             {
                 Set(nameof(SelectedFilter), ref _SelectedFilter, value);
 
+                // some weird sh1t going on here
                 if (value != null && value.Id != 0)
                 {
                     //    var t = Task.Run(new System.Action(async () =>
@@ -79,6 +79,8 @@ namespace covid19phlib.ViewModels
                 }
             }
         }
+
+        public Enums_ListFilter CurrentFilter { get; set; } = Enums_ListFilter.NONE;
         #endregion
 
         #region commands
@@ -137,7 +139,7 @@ namespace covid19phlib.ViewModels
             });
         }
 
-        public async Task RefreshData(Enums_ListFilter listFilter = Enums_ListFilter.GLOBAL)
+        public async Task RefreshData(Enums_ListFilter listFilter = Enums_ListFilter.GLOBAL, bool force = false)
         {
             if (this.IsLoading
                 //|| this._currentFilter == listFilter
@@ -146,11 +148,16 @@ namespace covid19phlib.ViewModels
                 return;
             };
 
+            if (this.Countries.Count != 0 && this.CurrentFilter == listFilter && force == false)
+            {
+                return;
+            }
+
             i++; Debug.WriteLine(i);
 
             this.IsLoading = true;
 
-            this._currentFilter = listFilter;
+            this.CurrentFilter = listFilter;
 
             ResponseData responseData = null;
 
@@ -369,7 +376,7 @@ namespace covid19phlib.ViewModels
             {
                 var t = Task.Run(new System.Action(async () =>
                 {
-                    await RefreshData(this.SelectedFilter.ListFilter);
+                    await RefreshData(this.SelectedFilter.ListFilter, true);
                     this.CountryLookup = null;
                 }));
                 t.ConfigureAwait(false);
@@ -385,7 +392,7 @@ namespace covid19phlib.ViewModels
 
         public override async Task PullToRefresh()
         {
-            await RefreshData(this._currentFilter);
+            await RefreshData(this.CurrentFilter, true);
         }
 
         void SearchCountry()
