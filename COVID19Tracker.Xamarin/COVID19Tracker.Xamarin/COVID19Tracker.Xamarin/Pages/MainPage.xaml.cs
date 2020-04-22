@@ -12,22 +12,24 @@ namespace COVID19Tracker.Xamarin
         public MainPage()
         {
             InitializeComponent();
+
+            Refresh();
         }
 
-        protected override void OnAppearing()
+        void Refresh()
         {
-            base.OnAppearing();
-
             Device.BeginInvokeOnMainThread(async () =>
             {
-                await ((ViewModelLocator)this.BindingContext).Dashboard.RefreshData();
+                var dashboard = ((ViewModelLocator)this.BindingContext).Dashboard;
 
-                ((ViewModelLocator)this.BindingContext).Dashboard.OnCountryLookupFound += (s, c) =>
+                await dashboard.RefreshData(dashboard.CurrentFilter);
+
+                dashboard.OnCountryLookupFound += (s, c) =>
                 {
                     lvCountries.ScrollTo(c, ScrollToPosition.MakeVisible, true);
                 };
 
-                ((ViewModelLocator)this.BindingContext).Dashboard.OnShowMessage += async (s, c) =>
+                dashboard.OnShowMessage += async (s, c) =>
                 {
                     await DisplayAlert(null, c, "ok");
                 };
