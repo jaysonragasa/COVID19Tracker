@@ -10,22 +10,23 @@
              x:Name="this"
              NavigationPage.HasNavigationBar="False"
              BindingContext="{Binding Source={StaticResource Locator}}"
+             BackgroundColor="#FF29353D"
              >
 
-    <Grid jio:GridEx.RowDefinitions="auto,*,auto" BackgroundColor="#FF686868">
-        <Grid jio:GridEx.RowColumn="0 3">
-            <Image Source="facemasks.jpg" Aspect="AspectFill" />
-        </Grid>
-        
-        <Grid Grid.Row="0" BackgroundColor="#eeffffff" Margin="10,10,10,0">
-            <StackLayout Margin="10">
+    <Grid jio:GridEx.RowDefinitions="auto,*,auto">
+        <Grid Grid.Row="0" HeightRequest="50">
+            <Grid>
+                <Image Source="facemasks.jpg" Aspect="AspectFill" />
+            </Grid>
+            <Grid BackgroundColor="#DF29353D" />
+
+            <StackLayout Margin="10" VerticalOptions="Center">
                 <Label Text="COVID-19 Tracker" FontSize="20" />
-                <Label Text="data: coronatracker.com" FontSize="10" />
             </StackLayout>
         </Grid>
 
-        <Grid Grid.Row="1" jio:GridEx.RowDefinitions="* ~" >
-            <Grid Margin="10" BackgroundColor="#eeffffff">
+        <Grid Grid.Row="1" jio:GridEx.RowDefinitions="* ~" BackgroundColor="#FF29353D">
+            <Grid Margin="10">
                 <Grid jio:GridEx.RowDefinitions="~ ~ * ~" Margin="10">
                     <Grid BackgroundColor="#FFE49075" Margin="0,0,0,10">
                         <Label Text="Tap on the headers to sort the cases. Pull down the list to refresh." FontSize="10" Margin="10" TextColor="White" />
@@ -34,7 +35,7 @@
                     <Grid Grid.Row="1" jio:GridEx.ColumnDefinitions="1*,*,*,*" HeightRequest="30">
                         <Label Text="Country" FontAttributes="Bold" Grid.Column="0" FontSize="13">
                             <Label.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding Dashboard.Command_SortByCountryName}" />
+                                <TapGestureRecognizer Command="{Binding Dashboard.Command_SortByName}" />
                             </Label.GestureRecognizers>
                         </Label>
                         <Label Text="Confirmed" TextColor="#FFF4C363" FontAttributes="Bold" Grid.Column="1" FontSize="13"  HorizontalTextAlignment="Center">
@@ -47,7 +48,7 @@
                                 <TapGestureRecognizer Command="{Binding Dashboard.Command_SortByRecovered}" />
                             </Label.GestureRecognizers>
                         </Label>
-                        <Label Text="Deaths" TextColor="#FFDE3700" FontAttributes="Bold" Grid.Column="3" FontSize="13"  HorizontalTextAlignment="Center">
+                        <Label Text="Deceased" TextColor="#FFDE3700" FontAttributes="Bold" Grid.Column="3" FontSize="13"  HorizontalTextAlignment="Center">
                             <Label.GestureRecognizers>
                                 <TapGestureRecognizer Command="{Binding Dashboard.Command_SortByDeaths}" />
                             </Label.GestureRecognizers>
@@ -59,7 +60,7 @@
                     <ListView Grid.Row="2" 
                               x:Name="lvCountries"
                               ItemsSource="{Binding Dashboard.Countries}"
-                              SelectionMode="None"
+                              SelectionMode="Single"
                               IsPullToRefreshEnabled="True"
                               RefreshCommand="{Binding BindingContext.Dashboard.Command_PullRefresh, Source={x:Reference this}}"
                               IsRefreshing="{Binding BindingContext.Dashboard.IsRefreshing, Source={x:Reference this}, Mode=TwoWay}"
@@ -72,6 +73,12 @@
                                         <Label Text="{Binding TotalConfirmed, StringFormat='{}{0:#,0}'}" TextColor="#FFF4C363" Grid.Column="1" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" />
                                         <Label Text="{Binding TotalRecovered, StringFormat='{}{0:#,0}'}" TextColor="#FF60BB69" Grid.Column="2" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
                                         <Label Text="{Binding TotalDeaths, StringFormat='{}{0:#,0}'}" TextColor="#FFDE3700" Grid.Column="3" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
+
+                                        <Grid.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding BindingContext.Dashboard.Command_SelectedCountry, Source={x:Reference this}}" 
+                                                                  CommandParameter="{Binding .}"
+                                                                  />
+                                        </Grid.GestureRecognizers>
                                     </Grid>
                                 </ViewCell>
                             </DataTemplate>
@@ -81,7 +88,7 @@
                     <Grid jio:GridEx.GridDefinitions="~ ~ ~/ * * *" Grid.Row="3" Margin="0,3,0,0">
                         <Label Text="Total Confirmed" FontSize="10" Grid.Column="0" Margin="0,5,0,0" />
                         <Label Text="Total Recoveries" FontSize="10" Grid.Column="1" HorizontalTextAlignment="Center" Margin="0,5,0,0" />
-                        <Label Text="Total Deaths" FontSize="10" Grid.Column="2" HorizontalTextAlignment="End" Margin="0,5,0,0" />
+                        <Label Text="Total Deceased" FontSize="10" Grid.Column="2" HorizontalTextAlignment="End" Margin="0,5,0,0" />
 
                         <Label Text="{Binding Dashboard.TotalConfirmed, StringFormat='{}{0:#,0}'}" TextColor="#FFF4C363" Grid.Row="1" Grid.Column="0" />
                         <Label Text="{Binding Dashboard.TotalRecoveries, StringFormat='{}{0:#,0}'}" TextColor="#FF60BB69" Grid.Row="1" Grid.Column="1" HorizontalTextAlignment="Center" />
@@ -103,7 +110,7 @@
                 </Grid>
             </Grid>
 
-            <Grid VerticalOptions="End" BackgroundColor="White" IsVisible="{Binding Dashboard.ShowFilter}" Grid.Row="1">
+            <Grid VerticalOptions="End" BackgroundColor="#80CA5100" IsVisible="{Binding Dashboard.ShowFilter}" Grid.Row="1">
                 <StackLayout Margin="10">
                     <Label Text="Filter" />
                     <Grid jio:GridEx.ColumnDefinitions="* *">
@@ -122,10 +129,10 @@
             </Grid>
         </Grid>
 
-        <Grid Grid.Row="2" BackgroundColor="White">
+        <Grid Grid.Row="2" BackgroundColor="#80CA5100">
             <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
                 <Grid HeightRequest="48" WidthRequest="48">
-                    <Label Text="🔎" VerticalOptions="Center"  HorizontalOptions="Center" FontSize="20"/>
+                    <Label Text="🔍" VerticalOptions="Center"  HorizontalOptions="Center" FontSize="20"/>
 
                     <Grid.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding Dashboard.Command_ShowFilter}" />

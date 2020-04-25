@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="COVID19Tracker.Xamarin.AboutPage"
+             NavigationPage.BackButtonTitle="About"
+             BackgroundColor="#DF29353D"
+             xmlns:jio="clr-namespace:Jara.Xaml.Control.Extension;assembly=Jara.Xaml.ControlExtensions.Xamarin"
+             >
+    <ContentPage.Content>
+        <StackLayout Margin="10" VerticalOptions="Start">
+            <Label>
+                <Label.FormattedText>
+                    <FormattedString>
+                        <Span Text="COVID-19 Tracker" FontSize="Large" />
+                        <Span jio:TextEx.SpanLine="(c) JaraIO 2020" />
+                        <Span jio:TextEx.SpanLine="\n" />
+                        <Span jio:TextEx.SpanLine="Data Providers\n" FontAttributes="Bold" />
+                        <Span Text=" 📄 CoronaTracker&#xA;" />
+                        <Span Text=" 📂 Depart of Health Philippines" />
+                        <Span jio:TextEx.SpanLine="\n" />
+                        <Span jio:TextEx.SpanLine="Background image" FontAttributes="Bold" />
+                        <Span jio:TextEx.SpanLine="(c) angelinachirkova / stock.adobe.com" />
+                        <Span jio:TextEx.SpanLine="\n\n" />
+                        <Span Text="Third party licenses" FontAttributes="Bold" />
+                        <Span jio:TextEx.SpanLine="Xamarin.Forms\nMVVMLightLibsStd10\nNewtonsoft.Json\nJara.Xaml.ControlExtension\nXamarin.FFImageLoading" />
+                    </FormattedString>
+                </Label.FormattedText>
+            </Label>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

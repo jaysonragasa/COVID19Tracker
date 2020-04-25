@@ -7,7 +7,7 @@ namespace COVID19Tracker.Library.Interfaces
     {
         object NavPage { get; set; }
         void RegNavRoute(Enum_NavService_Pages routeName, Type pageType);
-        void GoToPage(Enum_NavService_Pages routeName);
+        void GoToPage(Enum_NavService_Pages routeName, object param = null);
         void GoBack();
     }
 }

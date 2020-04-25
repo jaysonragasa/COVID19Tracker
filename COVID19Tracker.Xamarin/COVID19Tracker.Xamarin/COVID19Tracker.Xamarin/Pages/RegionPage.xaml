@@ -1,0 +1,152 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="COVID19Tracker.Xamarin.RegionPage"
+             
+             xmlns:jio="clr-namespace:Jara.Xaml.Control.Extension;assembly=Jara.Xaml.ControlExtensions.Xamarin"
+             x:Name="this"
+             NavigationPage.HasNavigationBar="False"
+             BindingContext="{Binding Source={StaticResource Locator}}"
+             BackgroundColor="#FF29353D"
+             >
+    <ContentPage.Content>
+        <Grid jio:GridEx.RowDefinitions="auto,*,auto" BackgroundColor="#FF686868">
+            <Grid Grid.Row="0" HeightRequest="50">
+                <Grid>
+                    <Image Source="facemasks.jpg" Aspect="AspectFill" />
+                </Grid>
+                <Grid BackgroundColor="#DF29353D" />
+
+                <StackLayout Margin="10" VerticalOptions="Center">
+                    <Label Text="COVID-19 Tracker" FontSize="20" />
+                </StackLayout>
+            </Grid>
+
+            <Grid Grid.Row="1" jio:GridEx.RowDefinitions="* ~" BackgroundColor="#FF29353D">
+                <Grid Margin="10">
+                    <Grid jio:GridEx.RowDefinitions="~ ~ * ~" Margin="10">
+                        <Grid BackgroundColor="#FFE49075" Margin="0,0,0,10">
+                            <Label Text="Tap on the headers to sort the cases. Pull down the list to refresh." FontSize="10" Margin="10" TextColor="White" />
+                        </Grid>
+
+                        <Grid Grid.Row="1" jio:GridEx.ColumnDefinitions="1*,*,*,*" HeightRequest="30">
+                            <Label Text="Region" FontAttributes="Bold" Grid.Column="0" FontSize="13">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Region.Command_SortByName}" />
+                                </Label.GestureRecognizers>
+                            </Label>
+                            <Label Text="Confirmed" TextColor="#FFF4C363" FontAttributes="Bold" Grid.Column="1" FontSize="13"  HorizontalTextAlignment="Center">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Region.Command_SortByConfirmedCases}" />
+                                </Label.GestureRecognizers>
+                            </Label>
+                            <Label Text="Recovered" TextColor="#FF60BB69" FontAttributes="Bold" Grid.Column="2" FontSize="13"  HorizontalTextAlignment="Center">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Region.Command_SortByRecovered}" />
+                                </Label.GestureRecognizers>
+                            </Label>
+                            <Label Text="Deceased" TextColor="#FFDE3700" FontAttributes="Bold" Grid.Column="3" FontSize="13"  HorizontalTextAlignment="Center">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Region.Command_SortByDeaths}" />
+                                </Label.GestureRecognizers>
+                            </Label>
+
+                            <Grid Grid.ColumnSpan="4" HeightRequest="1" BackgroundColor="#80000000" VerticalOptions="End" />
+                        </Grid>
+
+                        <ListView Grid.Row="2" 
+                              x:Name="lvCountries"
+                              ItemsSource="{Binding Region.Regions}"
+                              SelectionMode="Single"
+                              IsPullToRefreshEnabled="True"
+                              RefreshCommand="{Binding BindingContext.Region.Command_PullRefresh, Source={x:Reference this}}"
+                              IsRefreshing="{Binding BindingContext.Region.IsRefreshing, Source={x:Reference this}, Mode=TwoWay}"
+                              >
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <ViewCell>
+                                        <Grid jio:GridEx.ColumnDefinitions="1*,*,*,*">
+                                            <Label Text="{Binding RegionName}" FontAttributes="Bold" Grid.Column="0" VerticalOptions="Center" />
+                                            <Label Text="{Binding TotalConfirmed, StringFormat='{}{0:#,0}'}" TextColor="#FFF4C363" Grid.Column="1" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" />
+                                            <Label Text="{Binding TotalRecovered, StringFormat='{}{0:#,0}'}" TextColor="#FF60BB69" Grid.Column="2" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
+                                            <Label Text="{Binding TotalDeaths, StringFormat='{}{0:#,0}'}" TextColor="#FFDE3700" Grid.Column="3" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
+
+                                            <Grid.GestureRecognizers>
+                                                <TapGestureRecognizer Command="{Binding BindingContext.Region.Command_SelectedRegion, Source={x:Reference this}}" 
+                                                                      CommandParameter="{Binding .}"
+                                                                  />
+                                            </Grid.GestureRecognizers>
+                                        </Grid>
+                                    </ViewCell>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+
+                        <Grid jio:GridEx.GridDefinitions="~ ~ ~/ * * *" Grid.Row="3" Margin="0,3,0,0">
+                            <Label Text="Total Confirmed" FontSize="10" Grid.Column="0" Margin="0,5,0,0" />
+                            <Label Text="Total Recoveries" FontSize="10" Grid.Column="1" HorizontalTextAlignment="Center" Margin="0,5,0,0" />
+                            <Label Text="Total Deceased" FontSize="10" Grid.Column="2" HorizontalTextAlignment="End" Margin="0,5,0,0" />
+
+                            <Label Text="{Binding Region.TotalConfirmed, StringFormat='{}{0:#,0}'}" TextColor="#FFF4C363" Grid.Row="1" Grid.Column="0" />
+                            <Label Text="{Binding Region.TotalRecoveries, StringFormat='{}{0:#,0}'}" TextColor="#FF60BB69" Grid.Row="1" Grid.Column="1" HorizontalTextAlignment="Center" />
+                            <Label Text="{Binding Region.TotalDeaths, StringFormat='{}{0:#,0}'}" TextColor="#FFDE3700" Grid.Row="1" Grid.Column="2" HorizontalTextAlignment="End" />
+
+                            <Label jio:GridEx.RowColumn="2/0 3" FontSize="10" HorizontalTextAlignment="End">
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span Text="as of Today" />
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+
+                            <Grid jio:GridEx.RowColumn="0 3/0 3" HeightRequest="1" BackgroundColor="#80000000" VerticalOptions="Start" />
+                        </Grid>
+
+                        <ActivityIndicator jio:GridEx.RowColumn="0 3" IsVisible="{Binding Region.IsLoading}" IsRunning="True" WidthRequest="24" VerticalOptions="Center" HorizontalOptions="Center" />
+                    </Grid>
+                </Grid>
+
+                <Grid VerticalOptions="End" BackgroundColor="#80CA5100" IsVisible="{Binding Region.ShowFilter}" Grid.Row="1">
+                    <StackLayout Margin="10">
+                        <Entry Placeholder="Search by region name" Text="{Binding Region.RegionLookup}" />
+                    </StackLayout>
+
+                    <Grid HeightRequest="1" BackgroundColor="#20000000" VerticalOptions="Start" HorizontalOptions="FillAndExpand" />
+                </Grid>
+            </Grid>
+
+            <Grid Grid.Row="2" BackgroundColor="#80CA5100">
+                <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+                    <Grid HeightRequest="48" WidthRequest="48">
+                        <Label Text="🔎" VerticalOptions="Center"  HorizontalOptions="Center" FontSize="20"/>
+
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding Region.Command_ShowFilter}" />
+                        </Grid.GestureRecognizers>
+                    </Grid>
+
+                    <Grid HeightRequest="48" WidthRequest="48">
+                        <Label Text="💡" VerticalOptions="Center"  HorizontalOptions="Center" FontSize="20"/>
+
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding Region.Command_About}" />
+                        </Grid.GestureRecognizers>
+                    </Grid>
+
+                    <Grid HeightRequest="48" WidthRequest="48">
+                        <Label Text="◀" VerticalOptions="Center"  HorizontalOptions="Center" FontSize="20"/>
+
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding Region.Command_Back}" />
+                        </Grid.GestureRecognizers>
+                    </Grid>
+                </StackLayout>
+
+                <Grid HeightRequest="1" BackgroundColor="#20000000" VerticalOptions="Start" HorizontalOptions="FillAndExpand" />
+            </Grid>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>
