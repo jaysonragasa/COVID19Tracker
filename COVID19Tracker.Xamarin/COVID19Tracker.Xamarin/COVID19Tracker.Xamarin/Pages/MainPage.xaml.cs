@@ -1,4 +1,6 @@
-﻿using covid19phlib.ViewModels;
+﻿using covid19phlib.Enums;
+using covid19phlib.ViewModels;
+using System;
 using System.ComponentModel;
 using Xamarin.Forms;
 
@@ -21,8 +23,24 @@ namespace COVID19Tracker.Xamarin
             Device.BeginInvokeOnMainThread(async () =>
             {
                 var dashboard = ((ViewModelLocator)this.BindingContext).Dashboard;
+                dashboard.ReloadOnFilterSelection = false;
+                dashboard.AddListFilter();
 
-                await dashboard.RefreshData(dashboard.CurrentFilter);
+                var app = (App)Application.Current;
+                var selectedFilter = app.Settings.GetSetting("SelectedFilter", "GLOBAL");
+
+                var filter = (Enums_ListFilter)Enum.Parse(typeof(Enums_ListFilter), selectedFilter.ToString());
+
+                if (filter == Enums_ListFilter.GLOBAL)
+                {
+                    dashboard.SelectedFilter = dashboard.ListFilter[0];
+                }
+                else if(filter == Enums_ListFilter.ASEAN)
+                {
+                    dashboard.SelectedFilter = dashboard.ListFilter[1];
+                }
+
+                await dashboard.RefreshData(filter);
 
                 dashboard.OnCountryLookupFound += (s, c) =>
                 {
@@ -30,9 +48,11 @@ namespace COVID19Tracker.Xamarin
                 };
 
                 dashboard.OnShowMessage += async (s, c) =>
-                {
+                {   
                     await DisplayAlert(null, c, "ok");
                 };
+
+                dashboard.ReloadOnFilterSelection = true;
             });
         }
     }

@@ -14,6 +14,7 @@ namespace covid19phlib.ViewModels
         public INavService Nav { get; set; } = null;
 		public IAPILocator API { get; set; } = null;
         public IIoC IoC { get; set; } = null;
+        public ISettings Settings { get; set; } = null;
 
         private bool _IsLoading = false;
 		public bool IsLoading
