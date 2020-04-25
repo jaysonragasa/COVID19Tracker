@@ -23,7 +23,8 @@ namespace covid19phlib.ViewModels
         #endregion
 
         #region vars
-        
+        bool _firstLoad = true; 
+
         int i = 0;
 
         List<DTO_Model_CountryData> _localStore = new List<DTO_Model_CountryData>();
@@ -44,13 +45,17 @@ namespace covid19phlib.ViewModels
                 Set(nameof(SelectedFilter), ref _SelectedFilter, value);
 
                 // some weird sh1t going on here
-                if (value != null && value.Id != 0)
+                if (value != null && value.Id != 0 && this.ReloadOnFilterSelection)
                 {
-                    //    var t = Task.Run(new System.Action(async () =>
-                    //    {
-                    //        await RefreshData(value.ListFilter);
-                    //    }));
-                    //    t.ConfigureAwait(false);
+                    this.Settings.SaveSettings("SelectedFilter", value.ListFilter.ToString());
+
+                    var t = Task.Run(new System.Action(async () =>
+                    {
+                        await RefreshData(value.ListFilter);
+                    }));
+                    t.ConfigureAwait(false);
+
+                    this.ShowFilter = false;
 
                     //    //var uiContent = SynchronizationContext.Current;
                     //    //uiContent.Send(x => RefreshData(value.ListFilter), null);
@@ -81,6 +86,13 @@ namespace covid19phlib.ViewModels
         }
 
         public Enums_ListFilter CurrentFilter { get; set; } = Enums_ListFilter.NONE;
+
+        private bool _ReloadOnFilterSelection = false;
+        public bool ReloadOnFilterSelection
+        {
+            get { return _ReloadOnFilterSelection; }
+            set { Set(nameof(ReloadOnFilterSelection), ref _ReloadOnFilterSelection, value); }
+        }
         #endregion
 
         #region commands
@@ -95,6 +107,7 @@ namespace covid19phlib.ViewModels
             this.IoC = ioc;
 
             this.Nav = this.IoC.GI<INavService>();
+            this.Settings = this.IoC.GI<ISettings>();
 
             InitCommands();
             RuntimeData();
@@ -122,6 +135,11 @@ namespace covid19phlib.ViewModels
         }
 
         void RuntimeData()
+        {
+            
+        }
+
+        public void AddListFilter()
         {
             ListFilter.Clear();
 
