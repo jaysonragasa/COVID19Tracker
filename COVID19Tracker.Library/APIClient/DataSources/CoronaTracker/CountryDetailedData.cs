@@ -1,4 +1,6 @@
-﻿using covid19phlib.DTO_Models;
+﻿#define USE_1_1_0
+
+using covid19phlib.DTO_Models;
 using covid19phlib.Interfaces;
 using COVID19Tracker.Library.APIClient.Interfaces;
 using COVID19Tracker.Library.DTO_Models;
@@ -11,6 +13,7 @@ namespace COVID19Tracker.Library.APIClient.DataSources.CoronaTracker
     public class CountryDetailedData : DataSourceBase, ICountryDetailedData
     {
         string jsondata = string.Empty;
+        string _countryCode = string.Empty;
 
         #region so cache them up
         List<DTO_Model_CaseInfo> JSONData = new List<DTO_Model_CaseInfo>();
@@ -34,9 +37,29 @@ namespace COVID19Tracker.Library.APIClient.DataSources.CoronaTracker
             this.Web = webClientService;
         }
 
+#if USE_1_1_0
         public async Task<ResponseData> GetDataByCountryCode(string countryCode)
         {
             ResponseData responseData = new ResponseData();
+
+            this._countryCode = countryCode;
+
+            this.JSONData.Clear();
+
+            if (countryCode == "PH")
+            {
+                responseData.Status = true;
+                responseData.Message = "GetDataByCountryCode";
+            }
+
+            return responseData;
+        }
+#else
+        public async Task<ResponseData> GetDataByCountryCode(string countryCode)
+        {
+            ResponseData responseData = new ResponseData();
+
+            this._countryCode = countryCode;
 
             this.JSONData.Clear();
 
@@ -59,7 +82,31 @@ namespace COVID19Tracker.Library.APIClient.DataSources.CoronaTracker
 
             return responseData;
         }
+#endif
 
+#if USE_1_1_0
+        public async Task<ResponseData> GetAllRegionsAsync()
+        {
+            ResponseData responseData = new ResponseData();
+            List<DTO_Model_Region> caseinfolist = new List<DTO_Model_Region>();
+
+            caseinfolist = await this.Web.GetAsync<List<DTO_Model_Region>>($"https://raw.githubusercontent.com/jaysonragasa/COVID19DataDrop/master/{_countryCode}_regions.json");
+
+            if (caseinfolist != null && caseinfolist.Count != 0)
+            {
+                responseData.Result = caseinfolist;
+                responseData.Status = true;
+            }
+            else
+            {
+                responseData.Status = false;
+            }
+
+            responseData.Message = "GetByRegionAsync";
+
+            return responseData;
+        }
+#else
         public async Task<ResponseData> GetAllRegionsAsync()
         {
             ResponseData responseData = new ResponseData();
@@ -91,6 +138,7 @@ namespace COVID19Tracker.Library.APIClient.DataSources.CoronaTracker
 
             return responseData;
         }
+#endif
 
         public async Task<ResponseData> GetAllCitiesAsync()
         {
@@ -124,6 +172,40 @@ namespace COVID19Tracker.Library.APIClient.DataSources.CoronaTracker
             return responseData;
         }
 
+#if USE_1_1_0
+        public async Task<ResponseData> GetCitiesByRegionNameAsync(string regionName)
+        {
+            ResponseData responseData = new ResponseData();
+            List<DTO_Model_City> caseinfolist = new List<DTO_Model_City>();
+
+            var regName = regionName;
+            regName = regName.Replace(' ', '_');
+            regName = regName.Replace('/', '~');
+
+            caseinfolist = await this.Web.GetAsync<List<DTO_Model_City>>($"https://raw.githubusercontent.com/jaysonragasa/COVID19DataDrop/master/{_countryCode}_{regName}.json");
+
+            if (caseinfolist != null && caseinfolist.Count > 0)
+            {
+                for (int i = 0; i < caseinfolist.Count; i++)
+                {
+                    // fix enye
+                    bool hasenye = caseinfolist[i].CityName.Contains("ã±A");
+                    caseinfolist[i].CityName = hasenye ? caseinfolist[i].CityName.Replace("ã±A", "ña") : caseinfolist[i].CityName;
+                    caseinfolist[i].CityName = string.IsNullOrWhiteSpace(caseinfolist[i].CityName) ? "(unkown)" : caseinfolist[i].CityName;
+                }
+
+                responseData.Result = caseinfolist;
+                responseData.Status = true;
+            }
+            else
+            {
+                responseData.Status = false;
+            }
+            responseData.Message = "GetByCityAsync";
+
+            return responseData;
+        }
+#else
         public async Task<ResponseData> GetCitiesByRegionNameAsync(string regionName)
         {
             ResponseData responseData = new ResponseData();
@@ -158,6 +240,7 @@ namespace COVID19Tracker.Library.APIClient.DataSources.CoronaTracker
 
             return responseData;
         }
+#endif
 
         public async Task<ResponseData> GetDataByCityNameAsync(string cityName)
         {
