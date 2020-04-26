@@ -157,18 +157,28 @@ namespace DOHDataImporter.Console
                     var cities = (List<DTO_Model_City>)respcity.Result;
                     jsonregion = JsonConvert.SerializeObject(cities);
 
-                    foreach (var city in cities)
-                    {
-                        string filename = city.CityName;
-                        filename = filename.Replace(' ', '_');
-                        filename = filename.Replace('/', '~');
-                        filename = "PH_" + filename + ".json";
+                    string filename = reg.RegionName;
+                    filename = filename.Replace(' ', '_');
+                    filename = filename.Replace('/', '~');
+                    filename = "PH_" + filename + ".json";
 
-                        using (StreamWriter writer = new StreamWriter(filename, false) { AutoFlush = true })
-                        {
-                            writer.Write(jsonregion);
-                        }
+                    using (StreamWriter writer = new StreamWriter(filename, false) { AutoFlush = true })
+                    {
+                        writer.Write(jsonregion);
                     }
+
+                    //foreach (var city in cities)
+                    //{
+                    //    string filename = city.CityName;
+                    //    filename = filename.Replace(' ', '_');
+                    //    filename = filename.Replace('/', '~');
+                    //    filename = "PH_" + filename + ".json";
+
+                    //    using (StreamWriter writer = new StreamWriter(filename, false) { AutoFlush = true })
+                    //    {
+                    //        writer.Write(jsonregion);
+                    //    }
+                    //}
                 }
             }
             
