@@ -142,7 +142,7 @@ namespace DOHDataImporter.Console
             p.City = p.JSONData.Select(x => x.ProvCityRes).Distinct().ToList();
 
             var allregions = p.GetAllRegionsAsync();
-            string jsonregion = JsonConvert.SerializeObject(allregions);
+            string jsonregion = JsonConvert.SerializeObject(allregions.Result);
 
             using (StreamWriter writer = new StreamWriter("PH_regions.json", false) { AutoFlush = true })
             {
@@ -155,6 +155,8 @@ namespace DOHDataImporter.Console
                 if(respcity.Status)
                 {
                     var cities = (List<DTO_Model_City>)respcity.Result;
+                    jsonregion = JsonConvert.SerializeObject(cities);
+
                     foreach (var city in cities)
                     {
                         string filename = city.CityName;
