@@ -94,6 +94,14 @@ namespace COVID19Tracker.Library.APIClient.DataSources.CoronaTracker
 
             if (caseinfolist != null && caseinfolist.Count != 0)
             {
+                for (int i = 0; i < caseinfolist.Count; i++)
+                {
+                    // fix enye
+                    bool hasenye = caseinfolist[i].RegionName.Contains("ã±A");
+                    caseinfolist[i].RegionName = hasenye ? caseinfolist[i].RegionName.Replace("ã±A", "ña") : caseinfolist[i].RegionName;
+                    caseinfolist[i].RegionName = string.IsNullOrWhiteSpace(caseinfolist[i].RegionName) ? "(unknown)" : caseinfolist[i].RegionName;
+                }
+
                 responseData.Result = caseinfolist;
                 responseData.Status = true;
             }
@@ -191,7 +199,7 @@ namespace COVID19Tracker.Library.APIClient.DataSources.CoronaTracker
                     // fix enye
                     bool hasenye = caseinfolist[i].CityName.Contains("ã±A");
                     caseinfolist[i].CityName = hasenye ? caseinfolist[i].CityName.Replace("ã±A", "ña") : caseinfolist[i].CityName;
-                    caseinfolist[i].CityName = string.IsNullOrWhiteSpace(caseinfolist[i].CityName) ? "(unkown)" : caseinfolist[i].CityName;
+                    caseinfolist[i].CityName = string.IsNullOrWhiteSpace(caseinfolist[i].CityName) ? "(unknown)" : caseinfolist[i].CityName;
                 }
 
                 responseData.Result = caseinfolist;
