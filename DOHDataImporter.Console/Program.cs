@@ -104,11 +104,11 @@ namespace DOHDataImporter.Console
             List<DTO_Model_City> caseinfolist = new List<DTO_Model_City>();
 
             this._cache_city = this.JSONData.Where(x => x.RegionRes == regionName).ToList();
-            var cityNames = this._cache_city.Select(x => x.ProvCityRes).Distinct().ToList();
+            var cityNames = this._cache_city.Select(x => x.CityMunRes).Distinct().ToList();
 
             for (int i = 0; i < cityNames.Count; i++)
             {
-                var currentCity = this._cache_city.Where(x => x.ProvCityRes == cityNames[i]).ToList();
+                var currentCity = this._cache_city.Where(x => x.CityMunRes == cityNames[i]).ToList();
 
                 // get confirmed case
                 DTO_Model_City caseInfo = new DTO_Model_City()

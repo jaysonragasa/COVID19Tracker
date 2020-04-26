@@ -56,8 +56,18 @@
         public string RegionRes { get; set; } = string.Empty;
 
         /// <summary>
-        /// Province of residence
+        /// Provincial
         /// </summary>
         public string ProvCityRes { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Health status
+        /// </summary>
+        public string HealthStatus { get; set; } = string.Empty;
+
+        /// <summary>
+        /// City municipality
+        /// </summary>
+        public string CityMunRes { get; set; } = string.Empty;
     }
 }
