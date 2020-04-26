@@ -92,8 +92,16 @@ namespace COVID19Tracker.Library.APIClient.DataSources.CoronaTracker
 
             caseinfolist = await this.Web.GetAsync<List<DTO_Model_Region>>($"https://raw.githubusercontent.com/jaysonragasa/COVID19DataDrop/master/{_countryCode}_regions.json");
 
-            responseData.Result = caseinfolist;
-            responseData.Status = true;
+            if (caseinfolist.Count != 0)
+            {
+                responseData.Result = caseinfolist;
+                responseData.Status = true;
+            }
+            else
+            {
+                responseData.Status = false;
+            }
+
             responseData.Message = "GetByRegionAsync";
 
             return responseData;
@@ -164,6 +172,32 @@ namespace COVID19Tracker.Library.APIClient.DataSources.CoronaTracker
             return responseData;
         }
 
+#if USE_1_1_0
+        public async Task<ResponseData> GetCitiesByRegionNameAsync(string regionName)
+        {
+            ResponseData responseData = new ResponseData();
+            List<DTO_Model_City> caseinfolist = new List<DTO_Model_City>();
+
+            var regName = regionName;
+            regName = regName.Replace(' ', '_');
+            regName = regName.Replace('/', '~');
+
+            caseinfolist = await this.Web.GetAsync<List<DTO_Model_City>>($"https://raw.githubusercontent.com/jaysonragasa/COVID19DataDrop/master/{_countryCode}_{regName}.json");
+
+            if (caseinfolist.Count != 0)
+            {
+                responseData.Result = caseinfolist;
+                responseData.Status = true;
+            }
+            else
+            {
+                responseData.Status = false;
+            }
+            responseData.Message = "GetByCityAsync";
+
+            return responseData;
+        }
+#else
         public async Task<ResponseData> GetCitiesByRegionNameAsync(string regionName)
         {
             ResponseData responseData = new ResponseData();
@@ -198,6 +232,7 @@ namespace COVID19Tracker.Library.APIClient.DataSources.CoronaTracker
 
             return responseData;
         }
+#endif
 
         public async Task<ResponseData> GetDataByCityNameAsync(string cityName)
         {
