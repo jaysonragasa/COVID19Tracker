@@ -30,10 +30,11 @@ namespace COVID19Tracker.Xamarin.Droid
             CachedImageRenderer.Init(enableFastRenderer: true);
             CachedImageRenderer.InitImageViewHandler();
 
-//#if RELEASE
-            AppCenter.Start("151bf9a6-f3cb-48e7-a989-82aa24d85a70",
-                               typeof(Analytics), typeof(Crashes));
-//#endif
+            //#if RELEASE
+            AppCenter.Start("android=92d0eee5-46a6-437e-ac98-22a11ab9c9a9;ios=8f6306a6-9b45-4b54-a4da-96141430ec56",
+                  typeof(Analytics), typeof(Crashes));
+
+            //#endif
 
             XamEs.Platform.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
