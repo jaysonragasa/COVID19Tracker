@@ -46,7 +46,7 @@ namespace COVID19Tracker.Library.APIClient.DataSources.CoronaTracker
 
             this.JSONData.Clear();
 
-            if (countryCode == "PH")
+            //if (countryCode == "PH")
             {
                 responseData.Status = true;
                 responseData.Message = "GetDataByCountryCode";

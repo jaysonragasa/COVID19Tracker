@@ -2,6 +2,8 @@
 using covid19phlib.Interfaces;
 using covid19phlib.Services;
 using COVID19Tracker.Library.APIClient.Interfaces;
+using COVID19Tracker.Library.Interfaces;
+using COVID19Tracker.Library.Services;
 using COVID19Tracker.Library.ViewModels;
 
 namespace covid19phlib.ViewModels

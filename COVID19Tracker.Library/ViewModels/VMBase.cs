@@ -15,6 +15,7 @@ namespace covid19phlib.ViewModels
 		public IAPILocator API { get; set; } = null;
         public IIoC IoC { get; set; } = null;
         public ISettings Settings { get; set; } = null;
+        public ILogger Logger { get; set; } = null;
 
         private bool _IsLoading = false;
 		public bool IsLoading

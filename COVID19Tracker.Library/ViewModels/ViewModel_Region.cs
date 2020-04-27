@@ -61,6 +61,8 @@ namespace COVID19Tracker.Library.ViewModels
 
             this.Nav = this.IoC.GI<INavService>();
 
+            this.Logger = this.IoC.GI<ILogger>();
+
             InitCommands();
             RuntimeData();
         }
@@ -69,6 +71,8 @@ namespace COVID19Tracker.Library.ViewModels
         #region command methods
         void Command_SelectedRegion_Click(Model_RegionData countryData)
         {
+            this.Logger.Log("Navigating to region: " + countryData.RegionName);
+
             this.Nav.GoToPage(COVID19Tracker.Library.Enums.Enum_NavService_Pages.CityPage, countryData.RegionName);
         }
         #endregion

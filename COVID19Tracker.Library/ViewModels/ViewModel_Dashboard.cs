@@ -107,7 +107,10 @@ namespace covid19phlib.ViewModels
             this.IoC = ioc;
 
             this.Nav = this.IoC.GI<INavService>();
+
             this.Settings = this.IoC.GI<ISettings>();
+
+            this.Logger = this.IoC.GI<ILogger>();
 
             InitCommands();
             RuntimeData();
@@ -117,6 +120,8 @@ namespace covid19phlib.ViewModels
         #region command methods
         void Command_SelectedCountry_Click(Model_CountryData countryData)
         {
+            this.Logger.Log("Navigating to country: " + countryData.CountryName);
+
             this.Nav.GoToPage(COVID19Tracker.Library.Enums.Enum_NavService_Pages.RegionPage, countryData.CountryCode);
         }
         #endregion
