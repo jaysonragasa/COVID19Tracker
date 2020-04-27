@@ -120,7 +120,8 @@ namespace covid19phlib.ViewModels
         #region command methods
         void Command_SelectedCountry_Click(Model_CountryData countryData)
         {
-            this.Logger.Log("Navigating to country: " + countryData.CountryName);
+            if(this.Logger != null)
+                this.Logger.Log("Navigating to country: " + countryData.CountryName);
 
             this.Nav.GoToPage(COVID19Tracker.Library.Enums.Enum_NavService_Pages.RegionPage, countryData.CountryCode);
         }
