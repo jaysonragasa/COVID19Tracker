@@ -69,5 +69,7 @@
         /// City municipality
         /// </summary>
         public string CityMunRes { get; set; } = string.Empty;
+
+        public string ProvRes { get; set; } = string.Empty;
     }
 }

@@ -32,7 +32,7 @@ namespace DOHDataImporter.Console
 
             p.JSONData = JsonConvert.DeserializeObject<List<DTO_Model_CaseInfo>>(p.json);
 
-            p.Regions = p.JSONData.Select(x => x.RegionRes).Distinct().ToList();
+            p.Regions = p.JSONData.Select(x => x.ProvRes).Distinct().ToList();
             p.City = p.JSONData.Select(x => x.ProvCityRes).Distinct().ToList();
 
             var allregions = p.GetAllRegionsAsync();
@@ -73,7 +73,7 @@ namespace DOHDataImporter.Console
 
             for (int i = 0; i < this.Regions.Count; i++)
             {
-                var currentRegion = this.JSONData.Where(x => x.RegionRes == this.Regions[i]).ToList();
+                var currentRegion = this.JSONData.Where(x => x.ProvRes == this.Regions[i]).ToList();
 
                 // get confirmed case
                 DTO_Model_Region caseInfo = new DTO_Model_Region()
@@ -103,7 +103,7 @@ namespace DOHDataImporter.Console
             ResponseData responseData = new ResponseData();
             List<DTO_Model_City> caseinfolist = new List<DTO_Model_City>();
 
-            this._cache_city = this.JSONData.Where(x => x.RegionRes == regionName).ToList();
+            this._cache_city = this.JSONData.Where(x => x.ProvRes == regionName).ToList();
             var cityNames = this._cache_city.Select(x => x.CityMunRes).Distinct().ToList();
 
             for (int i = 0; i < cityNames.Count; i++)
