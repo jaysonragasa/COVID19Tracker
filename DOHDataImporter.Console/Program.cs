@@ -2,13 +2,90 @@
 using COVID19Tracker.Library.DTO_Models;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
+using System.Threading;
 using c = System.Console;
 
 namespace DOHDataImporter.Console
 {
     class Program
+    {
+        static void Main(string[] args)
+        {
+            Stopwatch sw = new Stopwatch();
+            sw.Restart();
+            
+            CSVTOJSON csv = new CSVTOJSON();
+
+            c.WriteLine("Converting CSV to JSON");
+            sw.Start();
+            string json = csv.ConvertToJSON();
+            sw.Stop();
+            c.WriteLine("Total duration converting CSV to JSON: " + sw.Elapsed);
+
+            c.WriteLine("Parsing region and city data");
+            ProgramJSONParse tojson = new ProgramJSONParse();
+            tojson.Start(json);
+        }
+    }
+
+    class CSVTOJSON
+    {
+        public string ConvertToJSON()
+        {
+            string json = string.Empty;
+            string csv = string.Empty;
+
+            using (StreamReader reader = new StreamReader("data.csv"))
+            {
+                csv = reader.ReadToEnd();
+            }
+
+            string[] lines = csv.Split(new string[] { "\n" }, System.StringSplitOptions.None);
+            c.WriteLine("CSV has " + (lines.Length - 1) + " data");
+
+            if (lines.Length > 1)
+            {
+                // parse headers
+                string[] headers = lines[0].Split(',');
+
+                StringBuilder sbjson = new StringBuilder();
+                sbjson.Clear();
+                sbjson.Append("[");
+
+                // parse data
+                for (int i = 1; i < lines.Length; i++)
+                {
+                    if (string.IsNullOrWhiteSpace(lines[i])) continue;
+                    if (string.IsNullOrEmpty(lines[i])) continue;
+
+                    sbjson.Append("{");
+
+                    string[] data = lines[i].Split(',');
+
+                    for (int h = 0; h < headers.Length; h++)
+                    {
+                        sbjson.Append(
+                            $"\"{headers[h]}\": \"{data[h]}\"" + (h < headers.Length - 1 ? "," : null)
+                        );
+                    }
+
+                    sbjson.Append("}" + (i < lines.Length - 1 ? "," : null));
+                }
+
+                sbjson.Append("]");
+
+                json = sbjson.ToString();
+            }
+
+            return json;
+        }
+    }
+
+    class ProgramJSONParse
     {
         string json = string.Empty;
         List<DTO_Model_CaseInfo> JSONData = new List<DTO_Model_CaseInfo>();
@@ -18,16 +95,20 @@ namespace DOHDataImporter.Console
         public List<string> Regions { get; set; } = new List<string>();
         public List<string> City { get; set; } = new List<string>();
 
-        static void Main(string[] args)
+        public void Start(string json = "")
         {
             c.WriteLine("parsing JSON");
 
-            Program p = new Program();
+            ProgramJSONParse p = new ProgramJSONParse();
+            p.json = json;
 
-            using(StreamReader reader = new StreamReader("regioncitydata.json"))
+            if (string.IsNullOrEmpty(json))
             {
-                string j = reader.ReadToEnd();
-                p.json = j;
+                using (StreamReader reader = new StreamReader("regioncitydata.json"))
+                {
+                    string j = reader.ReadToEnd();
+                    p.json = j;
+                }
             }
 
             p.JSONData = JsonConvert.DeserializeObject<List<DTO_Model_CaseInfo>>(p.json);
@@ -46,7 +127,7 @@ namespace DOHDataImporter.Console
             foreach (var reg in (List<DTO_Model_Region>)allregions.Result)
             {
                 var respcity = p.GetCitiesByRegionNameAsync(reg.RegionName);
-                if(respcity.Status)
+                if (respcity.Status)
                 {
                     var cities = (List<DTO_Model_City>)respcity.Result;
                     jsonregion = JsonConvert.SerializeObject(cities);
@@ -62,7 +143,7 @@ namespace DOHDataImporter.Console
                     }
                 }
             }
-            
+
             //c.ReadLine();
         }
 
