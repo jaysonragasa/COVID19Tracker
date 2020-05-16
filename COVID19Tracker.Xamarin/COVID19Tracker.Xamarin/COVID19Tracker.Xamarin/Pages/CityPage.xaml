@@ -23,6 +23,14 @@
                 <StackLayout Margin="10" VerticalOptions="Center">
                     <Label Text="COVID-19 Tracker" FontSize="20" />
                 </StackLayout>
+
+                <Grid HeightRequest="48" WidthRequest="48" HorizontalOptions="End">
+                    <Label Text="&#xf0009;" FontFamily="materialfonts" VerticalOptions="Center"  HorizontalOptions="Center" FontSize="20"/>
+
+                    <Grid.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding City.Command_About}" />
+                    </Grid.GestureRecognizers>
+                </Grid>
             </Grid>
 
             <Grid Grid.Row="1" jio:GridEx.RowDefinitions="* ~" BackgroundColor="#FF29353D">
@@ -121,7 +129,7 @@
             <Grid Grid.Row="2" BackgroundColor="#80CA5100">
                 <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
                     <Grid HeightRequest="48" WidthRequest="48">
-                        <Label Text="🔎" VerticalOptions="Center"  HorizontalOptions="Center" FontSize="25"/>
+                        <Label Text="&#xf0349;" FontFamily="materialfonts" VerticalOptions="Center"  HorizontalOptions="Center" FontSize="20"/>
 
                         <Grid.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding City.Command_ShowFilter}" />
@@ -129,15 +137,7 @@
                     </Grid>
 
                     <Grid HeightRequest="48" WidthRequest="48">
-                        <Label Text="💡" VerticalOptions="Center"  HorizontalOptions="Center" FontSize="20"/>
-
-                        <Grid.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding City.Command_About}" />
-                        </Grid.GestureRecognizers>
-                    </Grid>
-
-                    <Grid HeightRequest="48" WidthRequest="48">
-                        <Label Text="◀" VerticalOptions="Center"  HorizontalOptions="Center" FontSize="20"/>
+                        <Label Text="&#xf004d;" FontFamily="materialfonts" VerticalOptions="Center"  HorizontalOptions="Center" FontSize="20"/>
 
                         <Grid.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding City.Command_Back}" />
